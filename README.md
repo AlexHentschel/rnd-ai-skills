@@ -1,8 +1,10 @@
 # ah-ai-skills
 
 A dedicated repository of reusable AI skills (for **Cursor IDE** and **Claude Code**), cloned by
-collaborators. It will accrue multiple skills over time; the first capability is **research-notebook
-claim validation** for scientific papers.
+collaborators. It will accrue multiple skills over time. Current capabilities:
+- **research-notebook claim validation** for scientific papers (two-layer: tool + methodology);
+- **confirming a reported vulnerability** — a methodology skill for a human-expert + AI pair to
+  confirm/refute, generalize, and report a *reported* security defect.
 
 ## The first capability — NotebookLM claim validation (two-layer)
 - **Tool layer — `skills/notebooklm/`** — a vendored, **patched copy** of an external MIT-licensed
@@ -11,6 +13,15 @@ claim validation** for scientific papers.
 - **Methodology layer — `skills/paper-claim-validation/`** — how to use the notebook for rigorous
   per-claim validation and clearer, less-jargon rephrasing. Entry point: its `SKILL.md`.
 - **Always-on safeguard — `CLAUDE.md-snippet.md`** — paste into your `CLAUDE.md` / always-apply rule.
+
+## The second capability — confirming a reported vulnerability
+- **Methodology skill — `skills/confirming-a-reported-vulnerability/`** — a single, self-contained
+  `SKILL.md`. Given a *reported* security defect (audit finding, bug-bounty report, scanner output, or a
+  colleague's claim) plus a PoC, it drives a human-expert + AI pair through a ten-move loop: bound scope →
+  correctness yardstick → independently confirm/refute → reachability/attacker model → extend to sibling
+  sites → close loose ends → consolidate → abstract into a minimal maintainer-facing report → make it
+  independently checkable → gate-keep follow-ons. Language- and domain-agnostic; persona-neutral; no
+  external tool dependency. **Not** for proactively hunting new bugs (that is ordinary review).
 
 ## Layout
 ```
@@ -22,12 +33,15 @@ ah-ai-skills/
     │   ├── UPSTREAM.md                  ← upstream ref + license + patch record + weekly-update check
     │   ├── INSTALL.md                   ← install / auth / operate; corrections to stock docs
     │   └── SKILL.md, scripts/, references/, LICENSE, requirements.txt  ← vendored skill files
-    └── paper-claim-validation/          ← methodology skill (generic; persona-neutral)
+    ├── paper-claim-validation/          ← methodology skill (generic; persona-neutral)
+    │   ├── SKILL.md
+    │   └── reference/
+    │       ├── per-claim-validation-loop.md
+    │       ├── prompt-templates.md
+    │       └── troubleshooting.md
+    └── confirming-a-reported-vulnerability/   ← methodology skill (generic; persona-neutral; no tool dep)
         ├── SKILL.md
-        └── reference/
-            ├── per-claim-validation-loop.md
-            ├── prompt-templates.md
-            └── troubleshooting.md
+        └── PROVENANCE.md                    ← origin + derivation + evidence basis (neutral; no exploit detail)
 ```
 
 ## Install
