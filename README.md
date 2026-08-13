@@ -1,4 +1,4 @@
-# ah-ai-skills
+# rnd-ai-skills
 
 A dedicated repository of reusable AI skills (for **Cursor IDE** and **Claude Code**), cloned by
 collaborators. It will accrue multiple skills over time. Current capabilities:
@@ -28,7 +28,7 @@ collaborators. It will accrue multiple skills over time. Current capabilities:
 
 ## Layout
 ```
-ah-ai-skills/
+rnd-ai-skills/
 ├── README.md
 ├── CLAUDE.md-snippet.md                 ← paste into your CLAUDE.md / always-apply rule (do this!)
 └── skills/
@@ -48,7 +48,7 @@ ah-ai-skills/
 ```
 
 ## Install
-1. Clone `ah-ai-skills`.
+1. Clone `rnd-ai-skills`.
 2. **Tool skill** — place `skills/notebooklm/` where your host discovers skills; build its venv and
    authenticate against *your* notebook (corpus fed with the paper's sources). Follow
    `skills/notebooklm/INSTALL.md` (note the symlink-venv requirement + the corrections to stock docs).
