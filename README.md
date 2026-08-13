@@ -40,7 +40,8 @@ ah-ai-skills/
     │       ├── prompt-templates.md
     │       └── troubleshooting.md
     └── confirming-a-reported-vulnerability/   ← methodology skill (generic; persona-neutral; no tool dep)
-        └── SKILL.md
+        ├── SKILL.md
+        └── PROVENANCE.md                    ← origin + derivation + evidence basis (neutral; no exploit detail)
 ```
 
 ## Install
