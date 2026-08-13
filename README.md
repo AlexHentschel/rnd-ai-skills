@@ -22,6 +22,9 @@ collaborators. It will accrue multiple skills over time. Current capabilities:
   sites → close loose ends → consolidate → abstract into a minimal maintainer-facing report → make it
   independently checkable → gate-keep follow-ons. Language- and domain-agnostic; persona-neutral; no
   external tool dependency. **Not** for proactively hunting new bugs (that is ordinary review).
+- **Always-on safeguard — `CLAUDE.md-snippet.md` (block 2)** — the handful of rules that must hold even on a
+  turn where the skill did not load (treat report+PoC+recollections as a hypothesis; verify-don't-accept;
+  don't-get-ahead-of-the-evidence). Paste into your `CLAUDE.md` / always-apply rule.
 
 ## Layout
 ```
