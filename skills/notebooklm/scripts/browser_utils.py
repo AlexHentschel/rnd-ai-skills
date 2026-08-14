@@ -85,7 +85,7 @@ class StealthUtils:
         # Type. A newline must NOT go through element.type("\n"): Playwright emits it
         # as Enter, which submits mid-prompt and splits a multi-paragraph prompt into
         # several messages. Send Shift+Enter instead (line break, no submit); the single
-        # explicit Enter in ask_question.py submits the whole prompt. [LOCAL PATCH — UPSTREAM.md P5]
+        # explicit Enter in ask_question.py submits the whole prompt. [local modification vs upstream — see UPSTREAM.md]
         for char in text:
             if char == "\n":
                 page.keyboard.press("Shift+Enter")

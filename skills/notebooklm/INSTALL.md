@@ -21,7 +21,7 @@ full patch record, and the upstream-update procedure. This file is just how to s
    ```
    - **Why build it yourself (FM-1).** If you skip this and just invoke the skill, `run.py` auto-creates
      `.venv` using *whatever `python` launched it* — often a package-manager Python that a later point-bump
-     removes, which then breaks every script (`UPSTREAM.md § P2`). Building a symlink venv on a stable
+     removes, which then breaks every script (see `UPSTREAM.md` § Environment). Building a symlink venv on a stable
      interpreter up front avoids that; `run.py` reuses an existing `.venv` and won't rebuild it.
    - **Why the last line.** The tool drives Chrome (`channel="chrome"`), not Chromium. The skill's own
      `setup_environment.py` runs `patchright install chrome` automatically — but **only when it builds the
