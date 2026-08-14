@@ -139,9 +139,30 @@ manual check — agile-first.)
   `# Submit` / `page.keyboard.press("Enter")`). Verify: an over-cap `--question` exits 1 with `❌ Prompt
   over budget`; the same with `--allow-long` warns and proceeds.
 
+### P7 — NotebookLM domain migration `notebooklm.google.com` → `notebook.google.com`  (fixes reauth/setup hang)
+- **Problem.** Google migrated the app domain (product rebrand "NotebookLM" → "Gemini Notebook", 2026-08):
+  `notebooklm.google.com/` now 301-redirects to `notebook.google.com/`. Upstream hardcodes the old domain,
+  so `auth_manager.py`'s login-watcher (`wait_for_url` on `^https://notebooklm\.google\.com/`) never matches
+  after login → `reauth`/`setup` hangs until the 10-min timeout even though the user is fully logged in and
+  looking at their notebook. The two `"notebooklm.google.com" in page.url` access checks also return false
+  negatives on the new domain.
+- **Change (`scripts/auth_manager.py`, 4 sites):** `goto` targets → `https://notebook.google.com`; the two
+  substring checks → `re.search(r"notebook(lm)?\.google\.com", page.url)`; the `wait_for_url` regex →
+  `^https://notebook(lm)?\.google\.com/`. `re` is already imported. The `(lm)?` accepts **both** domains, so
+  a future upstream revert or Google flip-flop still works.
+- **Scope.** Only `scripts/auth_manager.py` is functional here. `ask_question.py` navigates via stored
+  library URLs (still `notebooklm.google.com`) which redirect fine, so no change needed. Doc/prose mentions
+  of the old domain (`README.md`, `SKILL.md`, `references/*.md`) are left as-is for continuity.
+- **Re-apply.** After any upstream overwrite of `auth_manager.py`, re-broaden the same 4 sites. Verify:
+  `reauth` prints `✅ Login successful!` promptly after landing on `notebook.google.com`.
+
 ## Documentation corrections (kept in `INSTALL.md`, not patched into upstream prose)
 Upstream `SKILL.md` carries guidance that is wrong for our usage; we correct it in `INSTALL.md` rather
 than editing upstream prose, to keep the upstream diff minimal:
+- **Product rebrand (2026-08):** "NotebookLM" is now branded **"Gemini Notebook"**, on domain
+  `notebook.google.com` (see § P7). No functional/API/DOM-selector changes observed beyond the domain as of
+  2026-08-14; the skill keeps the "notebooklm" name throughout for continuity. Treat product/UI references
+  to "Gemini Notebook" as the same product.
 - "Rate limit 50/day" → that is the **free tier**; **Pro ≈ 500/day**.
 - "Chromium installs automatically" → we launch **system Google Chrome** (`channel="chrome"`).
 - "No session persistence" → **false**; the profile retains chat history (root cause of FM-2).
