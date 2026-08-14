@@ -84,7 +84,7 @@ def ask_notebooklm(question: str, notebook_url: str, headless: bool = True) -> s
         print("  🌐 Opening notebook...")
         page.goto(notebook_url, wait_until="domcontentloaded")
 
-        # Wait for NotebookLM (domain migrated notebooklm.google.com -> notebook.google.com; accept both)
+        # Wait for NotebookLM (notebooklm.google.com 301-redirects to notebook.google.com (current); match either)
         page.wait_for_url(re.compile(r"^https://notebook(lm)?\.google\.com/"), timeout=10000)
 
         # Wait for query input (MCP approach)

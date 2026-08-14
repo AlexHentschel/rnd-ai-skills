@@ -124,8 +124,8 @@ class AuthManager:
             print(f"  ⏱️  Waiting up to {timeout_minutes} minutes for login...")
 
             try:
-                # Wait for URL to change to NotebookLM (regex ensures it's the actual domain, not a parameter)
-                # Google migrated the app domain notebooklm.google.com -> notebook.google.com; accept both.
+                # Wait for URL to change to NotebookLM (regex ensures it's the actual domain, not a parameter).
+                # notebooklm.google.com 301-redirects to notebook.google.com (current), so match either.
                 timeout_ms = int(timeout_minutes * 60 * 1000)
                 page.wait_for_url(re.compile(r"^https://notebook(lm)?\.google\.com/"), timeout=timeout_ms)
 
