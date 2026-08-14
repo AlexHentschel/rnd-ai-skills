@@ -146,15 +146,19 @@ manual check — agile-first.)
   after login → `reauth`/`setup` hangs until the 10-min timeout even though the user is fully logged in and
   looking at their notebook. The two `"notebooklm.google.com" in page.url` access checks also return false
   negatives on the new domain.
-- **Change (`scripts/auth_manager.py`, 4 sites):** `goto` targets → `https://notebook.google.com`; the two
-  substring checks → `re.search(r"notebook(lm)?\.google\.com", page.url)`; the `wait_for_url` regex →
-  `^https://notebook(lm)?\.google\.com/`. `re` is already imported. The `(lm)?` accepts **both** domains, so
-  a future upstream revert or Google flip-flop still works.
-- **Scope.** Only `scripts/auth_manager.py` is functional here. `ask_question.py` navigates via stored
-  library URLs (still `notebooklm.google.com`) which redirect fine, so no change needed. Doc/prose mentions
-  of the old domain (`README.md`, `SKILL.md`, `references/*.md`) are left as-is for continuity.
-- **Re-apply.** After any upstream overwrite of `auth_manager.py`, re-broaden the same 4 sites. Verify:
-  `reauth` prints `✅ Login successful!` promptly after landing on `notebook.google.com`.
+- **Change (5 sites across 2 files):** In `scripts/auth_manager.py` (4 sites): `goto` targets →
+  `https://notebook.google.com`; the two substring checks → `re.search(r"notebook(lm)?\.google\.com",
+  page.url)`; the `wait_for_url` regex → `^https://notebook(lm)?\.google\.com/`. In
+  `scripts/ask_question.py` (1 site, line ~88): the post-`goto` `wait_for_url` regex → same
+  `^https://notebook(lm)?\.google\.com/`. `re` is already imported in both. The `(lm)?` accepts **both**
+  domains, so a future upstream revert or Google flip-flop still works.
+- **Scope.** `ask_question.py` navigates via stored library URLs (still `notebooklm.google.com`) which
+  redirect fine to the new domain, BUT its `wait_for_url` guard was hardcoded to the old domain and would
+  time out on the redirect target — hence the 1-site fix there too. Doc/prose mentions of the old domain
+  (`README.md`, `SKILL.md`, `references/*.md`) are left as-is for continuity.
+- **Re-apply.** After any upstream overwrite of either file, re-broaden the same 5 sites. Verify: `reauth`
+  prints `✅ Login successful!` promptly after landing on `notebook.google.com`, and a test
+  `ask_question.py` query returns an answer instead of a `wait_for_url` timeout.
 
 ## Documentation corrections (kept in `INSTALL.md`, not patched into upstream prose)
 Upstream `SKILL.md` carries guidance that is wrong for our usage; we correct it in `INSTALL.md` rather
