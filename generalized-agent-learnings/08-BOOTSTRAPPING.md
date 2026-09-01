@@ -2,6 +2,13 @@
 
 How to set up the system for a new engagement. Based on observing the trajectory from session 1 through session 20.
 
+> **This file is the *create-from-scratch* path** (no persona exists yet). If a persona's memory + rules
+> already exist and you are a fresh session onboarding to it, you are *adopting*, not creating — follow
+> that persona's session-start retrieval instead (generic path: `00-OVERVIEW.md` reading order →
+> `01-MEMORY-SYSTEM.md § Active Retrieval`). Before running the template below, confirm **which
+> project/workspace receives the files** and whether the engagement is **single- or multi-project** (multi
+> → use `11-MULTI-PROJECT-BOOTSTRAP.md` instead). See `README.md § Instantiate a persona`.
+
 ## The Trajectory
 
 The collaboration passes through distinct phases. Knowing which phase you're in calibrates expectations.

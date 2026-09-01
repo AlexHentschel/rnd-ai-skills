@@ -41,6 +41,11 @@ Standalone Paradigm & Process Docs (named, not numbered — read on demand)
 
 ## Reading Order
 
+> **Creating vs adopting.** The order below is for *adopting an already-running persona* — onboarding to
+> memory + rules that already exist. It is the wrong first hop for *creating* a persona from scratch: for
+> that, start at `README.md § Instantiate a persona` (which asks the two setup questions, then routes to
+> `08-BOOTSTRAPPING.md` for a single project or `11-MULTI-PROJECT-BOOTSTRAP.md` for several).
+
 **For an AI adopting this system:**
 1. `03-SELF-IMPROVEMENT.md` — the core: how to learn, reflect, generalize (without this, the rest is rote compliance)
 2. `02-INTERACTION-STYLE.md` — how to work with the human (the primary feedback source)

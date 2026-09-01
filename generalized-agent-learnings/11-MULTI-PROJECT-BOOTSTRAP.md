@@ -21,6 +21,8 @@ Use **this** file (`11`) when any of these holds:
 
 The two architectures are not mutually exclusive. A single-project persona that grows multi-project later can evolve via a meta-workstream (see `§ 6.4`) rather than rebuild from scratch.
 
+Both `08` and this file are *create/grow* paths. If a multi-project persona **already exists** and you are a fresh session onboarding to it, you are *adopting*, not creating — follow its session-start retrieval (generic path: `00-OVERVIEW.md` reading order → `01-MEMORY-SYSTEM.md § Active Retrieval`), not the setup steps below. See `README.md § Instantiate a persona` for the create-vs-adopt split and the two setup questions (which project/workspace receives the files; single vs multiple).
+
 ---
 
 ## 2. Why Single-Project Architecture Breaks at Scale

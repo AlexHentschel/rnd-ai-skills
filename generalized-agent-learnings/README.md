@@ -6,6 +6,30 @@ file is written to be read on its own. Point the AI at one file; it will follow 
 
 **Want the full map instead of a router?** Open `00-OVERVIEW.md`.
 
+## Instantiate a persona (start here when creating or adopting one)
+
+> **This tree is the recipe, not the house.** These files are a reference corpus describing *how* to set up
+> and run a persona. Instantiating a persona means writing that persona's own files into a target project —
+> **do not mutate the files in this tree** when you do it. Treat the corpus as read-only source material.
+>
+> **First decide which path you are on:**
+>
+> - **Adopting an already-running persona** (the persona's memory + rules already exist; you are a fresh
+>   session onboarding to it) → follow *that persona's* own session-start retrieval. Generic path when it
+>   has none of its own: the reading order in `00-OVERVIEW.md`, then `01-MEMORY-SYSTEM.md § Active
+>   Retrieval`. **Do not** run the bootstrap templates below — the infrastructure already exists.
+>
+> - **Creating a new persona from scratch** → **before writing anything, get explicit answers to both:**
+>   1. **Which project / workspace should receive the persona's files?** (Do not assume; ask.)
+>   2. **Single project, or multiple coexisting projects / workspaces?**
+>
+>   Then route: **single →** `08-BOOTSTRAPPING.md`; **multiple (or a single-project persona you expect to
+>   grow into several) →** `11-MULTI-PROJECT-BOOTSTRAP.md`.
+>
+> **Host shape.** Where the always-on files physically land depends on the host (Cursor: `.mdc` rules under
+> `.cursor/rules/`; Claude Code: `CLAUDE.md` + skills/hooks). `08`/`11` describe the Cursor shape; the
+> mapping to other hosts is a known adaptation step, not a blocker — see the repo root `README.md`.
+
 ## "I want to…" → open this
 
 | I want to… | Open / point the AI to |
