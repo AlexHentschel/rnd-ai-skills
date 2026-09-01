@@ -55,6 +55,22 @@ The agent's own operational records. Not claims about the external system.
 
 **Anti-pattern**: Accumulating evidence across sessions without ever synthesizing it into a presentable finding. The evidence exists but was never packaged for review.
 
+## The Self-Confirmation Loop
+
+`[universal]`
+
+When one agent writes a store, later reads it, and judges its own claims, re-reading is not verification — it is the exact loop that hardens a guess into "settled". The record *reads* clean because the same mind that produced it is evaluating it; nothing external ever touched the claim. The result is false confidence that survives until the claim is acted on.
+
+The defense is to require something **external** to the agent's own record before a claim is treated as confirmed:
+
+- the human explicitly confirming it;
+- a passing test / executed check that would fail if the claim were wrong;
+- the same finding surfacing independently, from a source that did not read this record.
+
+This is the failure mode the validation ladder above exists to prevent (only the human elevates to `verified`). It applies beyond durable memory findings, to **any long-lived store the agent maintains and re-reads**: an agent's own working notes harden self-generated conclusions the same way if nothing outside them confirms. For the task-notes instance of this discipline (status markers on unconfirmed claims, dating what can go stale, read-time staleness triage), see `working-notes-lean-context.md § 2` and `§ 6`.
+
+Minor for a single short task; decisive for anything long-lived, where the store accretes authority with age precisely as its content ages.
+
 ## Evidence Standards
 
 ### Exhaustive Claims Require Exhaustive Verification
@@ -172,5 +188,6 @@ This applies broadly: code fixes, document corrections, memory system changes, c
 
 - Validation gate and proactive engagement → `02-INTERACTION-STYLE.md` §4 (proactive engagement)
 - Evidence standards and failure modes → `06-FAILURE-MODES.md` (F3: exhaustive claims, F6: premature validation)
+- Self-confirmation loop, task-notes instance → `working-notes-lean-context.md` (§2 date/mark discipline, §6 read-time triage)
 - Context transitions and the bootstrapping trajectory → `08-BOOTSTRAPPING.md` (phase transitions, transferring to new domains)
 - Root cause tracing methodology → `05-CODE-AND-DOCUMENTS.md` (code references in documents)

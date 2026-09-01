@@ -10,6 +10,25 @@ A fresh session with only these files should be able to continue the task. When 
 exists, keep team-shared durable content there; keep execution-local notes in the
 working-notes folder (§1).
 
+## Load-bearing core (the non-relaxable subset)
+
+If you read nothing else, hold these; everything below elaborates them.
+
+- The chat window is a **cache**, not a store: execution detail lives on disk in the
+  task's notes folder; only what the current step needs is loaded back in.
+- Working notes are **written for a cold AI** — a fresh session with only the files —
+  and pass the four checks: decode · purpose · signals · lifecycle (§2).
+- **Spec vs working notes:** team-shared/durable/foundational → spec; execution-local/
+  in-flight → notes (§3). Never apply staged spec edits without human sign-off.
+- **Long outputs go through a wrapper sub-agent** that returns a short summary plus the
+  path to a detail file (§4) — never dump payloads into the caller's window.
+- **Detail files are evidence, not just summaries**: cold-AI-readable wrapper + the
+  verbatim payload intact (§4).
+- **Do not silently trust the notes' own past conclusions.** Date what can go stale,
+  mark what is unconfirmed, and re-verify at read time (§2, §6).
+- **Resume lean**: first action = `NOTES.md` + `INDEX.md`; open further files only when
+  this session's work needs them (§6).
+
 ## 1. Where notes live
 
 `ai-notes/` is a **proposal**, not an established team convention. Paths
@@ -92,7 +111,8 @@ Before you consider a note done, check all four:
   2. Purpose — it is clear what this claims, decides, or is for.
   3. Signals — it is clear when this still applies, what would confirm
      or refute it, and when a detail file is worth opening.
-  4. Lifecycle — status, age, and whether it is still current.
+  4. Lifecycle — it is clear how old this is, how it was last confirmed,
+     and whether it is still current.
 
 Do not treat prior notes as settled truth. Record what would change
 the current conclusion so a later session can challenge it.
@@ -100,6 +120,36 @@ the current conclusion so a later session can challenge it.
 Motivation: compaction and new chats drop thought chains. Notes that only
 this session (with its live chat context) can decode are equivalent to
 having no notes.
+
+### Date and mark what can go stale or is unconfirmed
+
+Not all notes age the same way. Discriminate, so the discipline costs
+tokens only where staleness is a real hazard:
+
+- **State-bearing entries** (current status, plans, open questions,
+  "what we know now") go stale as the task moves: **date them** (and, when
+  it matters, what last confirmed them). An old undated status entry is a
+  quiet trap: it reads clean and authoritative precisely when it is wrong.
+- **Claims about an external system** (code, tool, or API behavior) are
+  anchored, not just dated: record the commit SHA / version / date
+  observed. The anchor is what makes "does this still hold?" answerable
+  after the system changes.
+- **Load-bearing unconfirmed claims** — your own conclusions not yet
+  confirmed by anything outside this task's notes — carry an explicit
+  marker (e.g. `unverified:`) plus what would confirm or refute them.
+  Reuse a status vocabulary you already have rather than coining new
+  markers. Rereading your own note is not confirmation: one agent
+  writing, reading, and judging its own notes is the loop that hardens a
+  guess into "settled". Something external must confirm — the human
+  expert, a passing test, or the same finding surfacing independently.
+  (For durable persona memory, the same principle is the validation
+  ladder in `04-EVIDENCE-AND-VALIDATION.md`.)
+- **Settled reasoning** (decisions with their why, discarded alternatives,
+  mechanism explanations) does not need per-claim dating: it records how
+  the conclusion was reached, not the state of the world.
+
+Scale this to the folder's expected lifetime: a single-session task needs
+little; a long-lived folder across many sessions needs all of it.
 
 ## 3. Spec vs working notes (only when a spec exists)
 
@@ -149,9 +199,15 @@ returns of the following shape:
 
   A. First-hand summary (always) — a concise, detail-dense reply in the
      tool result / chat. Enough to decide the next step. Not a transcript.
-  B. Detail file (optional) — full output plus extra context needed to
-     answer or re-analyze the request later. Return the full path in
-     the summary.
+  B. Detail file (on demand) — full output plus enough context to answer
+     or re-analyze the request later, written **for a cold AI, not for
+     the child's own live context**: what was asked, what was run and
+     how to read it, what the result was and how far to trust it, then
+     the full payload intact below that wrapper. Return the full path in
+     the summary. A raw dump alone is not an acceptable detail file
+     (undecodable later); a summary alone is not either (the evidence is
+     gone). Put this requirement in the child's brief — the child will
+     otherwise default to writing for itself.
 
 Require A always. Always give the child a folder for B (e.g.
 `ai-notes/<task-slug>/returns/`), even when you expect B to be skipped:
@@ -197,16 +253,24 @@ lean context window. The goal is enough on disk that you can act correctly
 after loading into the window, on demand, the files this step needs. Do not
 load the whole tree into the window.
 
-Load-bearing (do not relax):
+Load-bearing for resuming (the rest of the core is at the top of this prompt):
 
   - First action: read NOTES.md and INDEX.md into the context window.
     They are the entry; do not load every file in the tree into the window.
   - If NOTES.md names a spec, that path is the shared source of truth.
     Load into the context window only the parts the current step needs;
     do not load the whole spec into the window by default.
-  - Working notes: if one looks wrong, update it in place and record why.
-    Spec: if it looks wrong, stage a proposed edit in `spec-staging/`;
+  - Working notes: if one looks wrong, update it in place and record why
+    (and when the correction overturns a prior conclusion, date it — the
+    fact that a conclusion changed is itself information). Spec: if it
+    looks wrong, stage a proposed edit in `spec-staging/`;
     do not patch the spec without human sign-off.
+
+Before relying on an old state-bearing entry (dated, per §2), triage it:
+re-verify, accept with the age in mind, or drop it. Do not silently trust
+it because it reads clean; a well-written stale note is the failure mode
+the dating in §2 exists to prevent. The reader decides — that decision is
+part of the resume judgment below.
 
 Retrieval is judgment, not a script. NOTES.md and INDEX.md give *initial*
 cues (which sibling notes, `returns/`, `briefs/`, or `spec-staging/` files
@@ -236,6 +300,10 @@ discipline, not extra work.
 - Always-read size backstop (heuristic, default ~300-500 lines; apply
   with judgment, not mechanically; try not to exceed ~2×); topic-split
   is the primary rule
+- Dating / status-marker granularity (default: date state-bearing
+  entries, anchor system-behavior claims, mark unconfirmed load-bearing
+  claims; lighter than dating every claim — adjust to the folder's
+  expected lifetime)
 - Sibling files vs a `notes/` subfolder after a split
 - Whether INDEX.md is a table, a list, or per-day files
 - Spec path convention and `spec-staging/` / `briefs/` layout
@@ -244,6 +312,7 @@ discipline, not extra work.
 ## Cross-references
 
 - `cold-ai-paradigm.md` — the write-time gate this document applies to working notes (decode · purpose · signals · lifecycle). Do not re-derive it here.
+- `04-EVIDENCE-AND-VALIDATION.md` — the durable-memory validation ladder (`unverified` → … → `verified`, human-only elevation) behind §2's status markers; also its self-confirmation-loop anti-pattern.
 - `01-MEMORY-SYSTEM.md` — durable *persona* memory (SESSION_LOG, WORKING_STYLE, …). Different lifetime and consumer than the task folder in §1.
 - `08-BOOTSTRAPPING.md` — first-session persona setup + session-start retrieval of those durable files. This document is the during-a-task counterpart.
 - `09-RECURSIVE-LEARNING.md` — sub-agent offload of *memory/reflection* (priority-3 crowding). Distinct from §4 here (wrap long tool output so the *task* window stays lean).
