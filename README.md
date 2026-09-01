@@ -1,10 +1,31 @@
 # rnd-ai-skills
 
-A dedicated repository of reusable AI skills (for **Cursor IDE** and **Claude Code**), cloned by
-collaborators. It will accrue multiple skills over time. Current capabilities:
+A repository of reusable, publishable AI assets (for **Cursor IDE** and **Claude Code**), cloned by
+collaborators. Despite the name it is **not limited to skills** — it is a catch-all home for AI guidance
+worth persisting and sharing. Two kinds of content live here:
+- **Skills** (`skills/`) — on-demand capabilities/methodologies in `SKILL.md` form.
+- **Guidance corpora** (top-level folders) — larger bodies of standing guidance read as reference, not
+  invoked as a skill (currently: `generalized-agent-learnings/`).
+
+Current capabilities:
 - **research-notebook claim validation** for scientific papers (two-layer: tool + methodology);
 - **confirming a reported vulnerability** — a methodology skill for a human-expert + AI pair to
-  confirm/refute, generalize, and report a *reported* security defect.
+  confirm/refute, generalize, and report a *reported* security defect;
+- **generalized-agent-learnings** — a reference corpus for setting up and running an AI persona well over
+  the long term (memory, self-improvement, bootstrapping single- or multi-project).
+
+## The corpus — generalized-agent-learnings
+- **What it is** — a self-contained tree of guidance (`generalized-agent-learnings/`); start at its
+  `README.md` (router) or `00-OVERVIEW.md` (full map). It is a **recipe, not a skill**: point an agent at
+  it to instantiate or run a persona; there is no bootstrapping skill to invoke (a persona setup is a
+  one-off, so a skill would not earn its keep).
+- **To instantiate** — open `generalized-agent-learnings/README.md § Instantiate a persona`. It asks which
+  project/workspace receives the files and whether the setup is single- or multi-project, then routes to
+  `08-BOOTSTRAPPING.md` or `11-MULTI-PROJECT-BOOTSTRAP.md`. The corpus tree itself stays unmodified.
+- **Host shape.** The bootstrap docs describe the **Cursor** shape (always-on `.mdc` rules); on **Claude
+  Code** the always-on layer moves to `CLAUDE.md` + skills + hooks. The adaptation is documented:
+  `generalized-agent-learnings/host-portability.md` (general method) and `host-adaptation-claude-code.md`
+  (the worked Claude Code instance).
 
 ## The first capability — NotebookLM claim validation (two-layer)
 - **Tool layer — `skills/notebooklm/`** — a vendored, **patched copy** of an external MIT-licensed
@@ -31,6 +52,7 @@ collaborators. It will accrue multiple skills over time. Current capabilities:
 rnd-ai-skills/
 ├── README.md
 ├── CLAUDE.md-snippet.md                 ← paste into your CLAUDE.md / always-apply rule (do this!)
+├── generalized-agent-learnings/         ← reference corpus (recipe, not a skill); start at its README.md
 └── skills/
     ├── notebooklm/                      ← vendored + patched tool skill (MIT; see UPSTREAM.md/LICENSE)
     │   ├── UPSTREAM.md                  ← upstream ref + license + patch record + weekly-update check
