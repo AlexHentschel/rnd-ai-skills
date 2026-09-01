@@ -36,7 +36,9 @@ Standalone Paradigm & Process Docs (named, not numbered — read on demand)
 ├── Effective Behavioral Guidelines . how to write a directive that actually fires (target / evaluate-cue / act-cue)
 ├── Flexible Plans for AI Execution . authoring a single plan that is executable yet gracefully revisable (layered commitment, OERC checkpoints, diminishing-returns termination)
 ├── plan-refinement-loop ............ the process that produces + hardens a flexible plan via a bounded iterate → self-review → converge loop (wraps Flexible Plans; gated by cold-ai-paradigm)
-└── working-notes-lean-context ...... task-scoped ephemeral notes + lean chat (window as cache); applies cold-ai-paradigm; distinct from durable persona memory
+├── working-notes-lean-context ...... task-scoped ephemeral notes + lean chat (window as cache); applies cold-ai-paradigm; distinct from durable persona memory
+├── host-portability ................ general method for carrying a persona to a different host (map identity/memory/capabilities/reflexes → host primitives)
+└── host-adaptation-claude-code ..... the worked Claude Code instance of host-portability (CLAUDE.md / skills / hooks / writable store; four hard problems)
 ```
 
 ## Reading Order
@@ -66,6 +68,8 @@ Standalone Paradigm & Process Docs (named, not numbered — read on demand)
 - `Flexible Plans for AI Execution.md` — how to author one plan that stays executable yet revisable (fixed vs provisional vs open commitment; checkpoints; criteria-revision gates). Read when drafting any non-trivial plan.
 - `plan-refinement-loop.md` — the process that *produces and hardens* a flexible plan: a bounded draft → self-review (substance → cold-ai/flexible-plans → economy) → converge loop, with a worked adaptation in `exemplary-artifacts/warm-reset-plan_META.md`. Read when a plan warrants iterative self-review before commitment; builds on `Flexible Plans for AI Execution.md` + `cold-ai-paradigm.md`.
 - `working-notes-lean-context.md` — during a task, persist execution-local notes on disk so the chat stays a cache (folder layout, spec vs notes, wrap long tool output, resume from `NOTES.md` + `INDEX.md`). Applies `cold-ai-paradigm.md`; not a substitute for durable persona memory in `01-MEMORY-SYSTEM.md`.
+- `host-portability.md` — the general method for re-expressing a persona on a *different* host: decompose it into identity / memory / capabilities / reflexes and map each to the target host's primitive; the hard parts are always-on identity, event-fired reflexes, and writable-memory integrity. Read when porting away from Cursor.
+- `host-adaptation-claude-code.md` — the fully worked Claude Code instance of `host-portability.md`: the Cursor→Claude Code mapping table (`CLAUDE.md` / skills / hooks / writable store), the four hard problems, cross-host skill sharing, and packaging as a plugin. Read when the target host is Claude Code.
 
 ## Key Design Decisions
 

@@ -8,6 +8,9 @@ How to set up the system for a new engagement. Based on observing the trajectory
 > `01-MEMORY-SYSTEM.md § Active Retrieval`). Before running the template below, confirm **which
 > project/workspace receives the files** and whether the engagement is **single- or multi-project** (multi
 > → use `11-MULTI-PROJECT-BOOTSTRAP.md` instead). See `README.md § Instantiate a persona`.
+>
+> This template describes the **Cursor** host shape (always-injected `.mdc` rules). Targeting **Claude Code**
+> or another host? Adapt as you go via `host-portability.md` (general method) / `host-adaptation-claude-code.md`.
 
 ## The Trajectory
 

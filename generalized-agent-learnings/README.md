@@ -27,8 +27,9 @@ file is written to be read on its own. Point the AI at one file; it will follow 
 >   grow into several) →** `11-MULTI-PROJECT-BOOTSTRAP.md`.
 >
 > **Host shape.** Where the always-on files physically land depends on the host (Cursor: `.mdc` rules under
-> `.cursor/rules/`; Claude Code: `CLAUDE.md` + skills/hooks). `08`/`11` describe the Cursor shape; the
-> mapping to other hosts is a known adaptation step, not a blocker — see the repo root `README.md`.
+> `.cursor/rules/`; Claude Code: `CLAUDE.md` + skills/hooks). `08`/`11` describe the Cursor shape; adapting to
+> another host is a known step, not a blocker — see `host-portability.md` (general method) and
+> `host-adaptation-claude-code.md` (the worked Claude Code instance).
 
 ## "I want to…" → open this
 
@@ -47,6 +48,8 @@ file is written to be read on its own. Point the AI at one file; it will follow 
 | Write good commit messages and pull-request descriptions | `pull-request-and-commit-message-authoring.md` |
 | Start a brand-new AI setup from scratch (single project) | `08-BOOTSTRAPPING.md` |
 | Start or grow an AI setup that spans several projects | `11-MULTI-PROJECT-BOOTSTRAP.md` |
+| Move the AI setup to a different host (general method) | `host-portability.md` |
+| Adapt the setup to Claude Code (not Cursor) | `host-adaptation-claude-code.md` |
 | Make the AI write notes its future self can actually reuse | `cold-ai-paradigm.md` |
 | Keep the chat lean — persist task working notes on disk | `working-notes-lean-context.md` |
 | Write rules that actually change the AI's behavior | `Effective Behavioral Guidelines.md` |

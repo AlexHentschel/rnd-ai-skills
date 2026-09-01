@@ -22,9 +22,10 @@ Current capabilities:
 - **To instantiate** — open `generalized-agent-learnings/README.md § Instantiate a persona`. It asks which
   project/workspace receives the files and whether the setup is single- or multi-project, then routes to
   `08-BOOTSTRAPPING.md` or `11-MULTI-PROJECT-BOOTSTRAP.md`. The corpus tree itself stays unmodified.
-- **Host shape (known limitation).** The bootstrap docs describe the **Cursor** shape (always-on `.mdc`
-  rules); on **Claude Code** the always-on layer moves to `CLAUDE.md` + skills + hooks. Adapting the
-  bootstrap to Claude Code is a follow-up.
+- **Host shape.** The bootstrap docs describe the **Cursor** shape (always-on `.mdc` rules); on **Claude
+  Code** the always-on layer moves to `CLAUDE.md` + skills + hooks. The adaptation is documented:
+  `generalized-agent-learnings/host-portability.md` (general method) and `host-adaptation-claude-code.md`
+  (the worked Claude Code instance).
 
 ## The first capability — NotebookLM claim validation (two-layer)
 - **Tool layer — `skills/notebooklm/`** — a vendored, **patched copy** of an external MIT-licensed
