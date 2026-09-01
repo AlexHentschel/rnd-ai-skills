@@ -231,6 +231,46 @@ and then get compacted or dropped. Keep that complete output on disk;
 keep only a short summary and the path in the chat. This session stays
 lean; a later session can still open the details.
 
+### Who is on the other end (delegation channel calibration)
+
+Both halves of a delegation channel are ephemeral carriers whose
+self-containment is set by the **resolution ability** of the far end —
+what that side can actually open and consult. The brief (parent → child)
+is calibrated by what the *child* can resolve; the return (child →
+parent) by what the *parent* can resolve. This applies in both
+directions: your agent dispatching a child, and your agent itself being
+invoked as a sub-agent by a higher-level agent or tool.
+
+- **Identification convention.** An agent that delegates or invokes a
+  sub-agent identifies itself as an agent and states its resolution
+  ability, one line, in the brief or invocation. Absence of such
+  identification ⇒ presume a **human** consumer (fuzzy default). An
+  invocation that is agent-shaped (structured tool framing, orchestration
+  vocabulary) yet unidentified: return self-contained-lean and append one
+  line with the notes-folder path (useful to every receiver kind).
+- **Establishing an unknown far end, ranked.** (1) **Confer:** for
+  outbound delegation there is nothing to detect — you author the child's
+  context; the brief states your resolution ability as the consumer of
+  the return, and for a child with file access points it at your durable
+  context (persona memory, the notes tree). (2) **Infer** from verified
+  host wiring. (3) **Citation probe**, only when indeterminate (typically
+  inbound or cross-host): ask the far end to quote the one-line purpose
+  of a context file you name. A named-file quote is hard to hallucinate;
+  a bare "do you run the same persona?" invites acquiescence; a
+  knowledge check (e.g. "do you know the concept you named?") may
+  false-positive on strong general models because the term is largely
+  self-descriptive. **Cache the probe result per tool stack; re-probe the
+  same stack only after ~3–7 days**, never on every delegation.
+- **Return (A) calibration by receiver.** *Same persona* (the parent
+  resolves the same durable context): operative content — what the parent
+  needs for its next decision — stays **inline in A**; only background
+  moves to references. *Foreign agent with its own context*: self-
+  contained, persona-neutral digest. *Default LLM* (no custom context):
+  self-contained; no persona/context mention (it cannot draw meaningful
+  conclusions from it). *Human* (unidentified invoker): human presentation
+  conventions — top-down, depth-calibrated, no internal vocabulary.
+  B is unchanged: its cold-AI bar already serves every receiver kind.
+
 ## 5. INDEX.md (retrievability)
 
 When you receive a return that includes a detail file, add a row to INDEX.md:
