@@ -116,6 +116,7 @@ The target directory tree, in full:
 ├── 03-domain-structure.mdc          always-injected; domain map + scope-tag taxonomy
 ├── 04-memory-update-triggers.mdc    always-injected; post-response checklist
 ├── 05-concept-graph.mdc             always-injected; 5 ops + relation vocabulary
+├── 06-destructive-operations.mdc    always-injected; hard-gate *stub* (never delete without explicit per-file grant). Full protocol: this corpus's `destructive-operations.md` — not to be confused with guidance file `06-FAILURE-MODES.md`
 ├── 10-self-improvement.mdc          on-demand
 ├── 11-evidence-and-validation.mdc   on-demand
 ├── 12-failure-modes.mdc             on-demand
@@ -146,7 +147,8 @@ The target directory tree, in full:
 │   │   ├── WORKING_STYLE.md         collaboration directives + reinforcement tracking
 │   │   └── HUMAN_PROFILE.md         per-individual notation prefs, pet peeves, expertise
 │   ├── crossref/                    deferred-creation secondary indexes
-│   └── mandates/README.md           cross-workstream cross-cutting-directive mechanism
+│   ├── mandates/README.md           cross-workstream cross-cutting-directive mechanism
+│   └── PERMITTED_DESTRUCTIVE_ACTIONS.md  ledger of human grants for irreversible actions (fail-closed if absent; see `destructive-operations.md` §6)
 └── knowledge/                       static domain reference material (optional)
 
 <consumer-workspace-N>/.cursor/
@@ -171,6 +173,7 @@ Authored to be executable by a fresh AI agent with no prior persona context. Fol
 3. `01-MEMORY-SYSTEM.md` and `10-ADAPTIVE-MEMORY-STRUCTURE.md` for the memory architecture.
 4. `Flexible Plans for AI Execution.md` and `14-plan-authoring.mdc`-equivalent guidance (if it exists in the persona being bootstrapped) for plan discipline.
 5. `06-FAILURE-MODES.md` for the failure-mode catalog.
+6. `destructive-operations.md` for the hard gate you will install in Phase 0 (identity stub + ledger) — before any snapshot or scratch cleanup.
 
 **Open questions to clarify with the human before phase 0, in this order:**
 - Is there an existing source persona to migrate from, or is this a clean-slate bootstrap?
@@ -185,8 +188,9 @@ Authored to be executable by a fresh AI agent with no prior persona context. Fol
 
 **Constraints** (fixed):
 - Self-containment from minute zero: no absolute paths into source-persona directories anywhere under `.cursor/`.
-- Rollback snapshot of any pre-existing `memory/` or `knowledge/` directory before any structural change.
+- Rollback snapshot of any pre-existing `memory/` or `knowledge/` directory before any structural change. **This snapshot is a backup-class action** (`destructive-operations.md` §8): get a one-time grant for the snapshot location at pre-flight; do not silently copy trees. Deleting the snapshot later is itself gated.
 - Validation gate (`§ 6.2`) preserved: human-only elevation of technical findings to `verified`.
+- Destructive-ops hard gate installed before any cleanup: always-on stub (`06-destructive-operations.mdc`) + empty ledger. Deleting bootstrap scratch, failed snapshots, or "temp" files is **not** autonomous — escalate per `destructive-operations.md` §5. Phase 7 already records "deletion of disposable artefacts is the user's call"; that is this gate, applied.
 
 **Known unknowns** (fixed; this phase exists to resolve them):
 - Which of the 9 canonical autonomous-execution defaults from `§ 6.1` apply as-stated vs. need bespoke resolution for this engagement.
@@ -195,13 +199,15 @@ Authored to be executable by a fresh AI agent with no prior persona context. Fol
 **Initial approach** *(provisional)*:
 1. Create `<host>/.cursor/rules/memory/workstreams/<meta-slug>/` with files: `CONTEXT.md`, `NOTES.md` (OERC log), `DECISIONS.md`, and any phase-specific playbooks.
 2. Create `~/.cursor/persona-builds/<build-slug>/SOURCE_PATH_TABLE.md` if external personas will be imported.
-3. Snapshot `memory/` → `memory-pre-<build>-<timestamp>/` (workspace-root sibling). Same for `knowledge/` if it exists.
+3. Snapshot `memory/` → `memory-pre-<build>-<timestamp>/` (workspace-root sibling). Same for `knowledge/` if it exists. Only after the backup-location grant from the constraints above.
 4. Walk the 9 canonical autonomous-execution defaults; record each in `DECISIONS.md` with explicit rationale.
+5. Write the always-on destructive-ops stub + empty ledger (`destructive-operations.md` §11). Do not defer to "first cleanup."
 
 **Initial success criteria** *(provisional)*:
 - `DECISIONS.md` shows 9 decisions, each with rationale and failure mode prevented.
 - Self-containment grep against the persona shows zero matches of the source-root prefixes registered in `SOURCE_PATH_TABLE.md`.
-- Rollback snapshot exists and is readable.
+- Rollback snapshot exists and is readable (and was created under the backup-location grant).
+- Always-on destructive-ops stub exists; ledger file exists with empty `Active grants`.
 
 **Checkpoint cadence**: at end of phase 0; OERC entry mandatory.
 **Authority handoffs**: 9 defaults autonomous if pre-blessed in pre-flight; otherwise escalate. Any net-new default class escalates.
@@ -264,6 +270,7 @@ Authored to be executable by a fresh AI agent with no prior persona context. Fol
 - Always-injected rule files are kept as **small as possible**; bulk content moves to on-demand files referenced by name.
 - Every rule file is **self-contained** (no absolute paths into other personas).
 - Identity / mission / load-bearing posture lives in `00-persona-and-mission.mdc`; do not scatter it across multiple files.
+- The destructive-ops **stub** stays always-injected (`06-destructive-operations.mdc`); the full protocol stays a pointer to `destructive-operations.md` (or a persona-local expansion). Do not fold the whole protocol into `00` — identity budget is finite (`host-portability.md` §3).
 
 **Known unknowns** (fixed):
 - How much of the existing single-project rule text generalizes cleanly vs. needs rewriting.
@@ -386,6 +393,8 @@ These are the default resolutions to recurring open questions, locked at Phase 0
 
 If the engagement adds a 10th default (e.g. "bootstrap corpus handling" for personas that have an upstream learnings corpus), record it as an extension with its own rationale.
 
+The destructive-ops hard gate is **not** a 10th autonomous-execution default. It is a Phase-0 **constraint** (installed before the build proceeds), because autonomy over deletion is exactly what the gate forbids. See `destructive-operations.md`.
+
 ### 6.2 The Validation Gate
 
 Two categories with different update rights:
@@ -485,6 +494,7 @@ Beyond the catalog in `06-FAILURE-MODES.md`, these are the failure modes specifi
 | Promotion candidates surface in conversation but never land in canonical rule files | Settled-vs-hypothesis register skipped at retrospective | The retrospective MUST surface durable candidates audibly; silent non-promotion is a failure |
 | Meta-workstream files mutated after close | Closure ritual incomplete or skipped | Frozen-snapshot header at close; new meta-workstream for any subsequent observation |
 | Concepts authored without provenance sub-bullet for cross-context evidence | Three-artefact discipline (count bump + refinement line + provenance sub-bullet) skipped | Treat the three artefacts as a single atomic write |
+| Bootstrap scratch / failed snapshot / "temp" files deleted without a §5 grant | Inferred permission from "we're just setting up" or from Phase 7's disposable-artefact list | Disposable ≠ pre-authorized. Install the hard gate in Phase 0; deletion of disposable artefacts remains the user's call (`destructive-operations.md`) |
 
 ---
 
@@ -499,6 +509,7 @@ Beyond the catalog in `06-FAILURE-MODES.md`, these are the failure modes specifi
 | Foundational | `04-EVIDENCE-AND-VALIDATION.md` | Validation gate, evidence standards |
 | As needed | `05-CODE-AND-DOCUMENTS.md` | Code/document craft |
 | As needed | `06-FAILURE-MODES.md` | Known pitfalls |
+| As needed | `destructive-operations.md` | Hard gate against inferred-permission deletion; instantiate in Phase 0 |
 | As needed | `07-META-LEARNINGS.md` | Higher-order lessons |
 | **Single-project bootstrap** | `08-BOOTSTRAPPING.md` | Genesis trajectory for one-project persona |
 | As needed | `09-RECURSIVE-LEARNING.md` | Applying the framework to itself |
@@ -513,7 +524,7 @@ Read `08` first if you have never bootstrapped a persona; the first-session mech
 
 - **Origin (`high-assurance-engineering`):** persona-evolution-v2 meta-workstream, 2026-05-21. Single-day, single-session build of the multi-project FCM persona; 8 phases, 5 commits, zero plan-discipline failure modes triggered, zero exit ramps triggered. The plan template in `§ 5` is distilled from the plan that drove that build.
 - **Second-context evidence (`circuitpython-display`, 2026-04 → 2026-05):** earlier multi-experiment persona attempt; first iteration of the multi-workstream pattern (flat memory + scope tags + project-folders + `mandates/multi-project.md`). The `MONITORING.md` file pattern was imported from this context during persona-evolution-v2 Phase 7.
-- **Bootstrap corpus reference:** `08-BOOTSTRAPPING.md` (single-project trajectory), `10-ADAPTIVE-MEMORY-STRUCTURE.md` (content/structure distinction, cold-AI test).
+- **Bootstrap corpus reference:** `08-BOOTSTRAPPING.md` (single-project trajectory), `10-ADAPTIVE-MEMORY-STRUCTURE.md` (content/structure distinction, cold-AI test), `destructive-operations.md` (hard gate; added to this file's Phase 0 / §4 tree after the originating build — instantiate even if the source persona's numbering differs).
 
 ---
 

@@ -32,12 +32,13 @@ them.**
 
 | Cursor persona component | Claude Code primitive | Fit |
 |---|---|---|
-| Always-applied rules: identity, memory-system core, interaction style, update-triggers, concept-graph protocol | **`CLAUDE.md`** (+ `@import` fragments) | Forced — always-on ⇒ must be the always-loaded file |
-| Agent-requestable "load-when-X" rules (self-improvement, evidence/validation, failure-modes, directive-authoring, plan-authoring) | **Skills** | Near-perfect — already description-gated "load when X" |
+| Always-applied rules: identity, memory-system core, interaction style, update-triggers, concept-graph protocol, **destructive-ops hard-gate stub** | **`CLAUDE.md`** (+ `@import` fragments) | Forced — always-on ⇒ must be the always-loaded file. The stub is short; the full protocol is a skill (row below). |
+| Agent-requestable "load-when-X" rules (self-improvement, evidence/validation, failure-modes, directive-authoring, plan-authoring, **destructive-ops full protocol**) | **Skills** | Near-perfect — already description-gated "load when X". Destructive-ops skill does *not* replace the `CLAUDE.md` stub. |
 | Domain review checklists | **Skills** | Strong |
 | Concept-graph files (`concepts/<domain>/*.md`) | **Skill** (read-only mirror) **or** the writable store | Partial — retrieval-by-description fits, but concepts are written back to |
-| Mutated-every-session memory (`SESSION_LOG`, `WORKING_STYLE`, people profiles, `_RELATIONS`, `_INDEX`) | **Writable memory store** (a file-tool directory, optionally a memory MCP server) | Must **NOT** be a packaged/versioned file |
+| Mutated-every-session memory (`SESSION_LOG`, `WORKING_STYLE`, people profiles, `_RELATIONS`, `_INDEX`, **permitted-destructive-actions ledger**) | **Writable memory store** (a file-tool directory, optionally a memory MCP server) | Must **NOT** be a packaged/versioned file. Ledger is fail-closed if lost (`destructive-operations.md` §6). |
 | Post-response update-triggers checklist | **Hook** (`Stop` / post-response) | Skills can't self-fire |
+| Per-action destructive-ops self-check | **Hook** (`PreToolUse` / pre-shell, if the host exposes it) on `rm` / `git reset --hard` / `git push --force` / history-rewrite | Best-effort intercept. **Verify current Claude Code hook events before wiring** (this file's confidence note). If no pre-tool hook exists, the `CLAUDE.md` stub is the only intercept — call that lossy. |
 | Session-start active retrieval | **Hook** (`SessionStart`) + a `CLAUDE.md` read-order contract | Forced retrieval ≠ probabilistic skill election |
 | `explore` / `generalPurpose` subagents | **Subagents / Task** | Direct equivalent |
 | Self-containment + distribution | **Plugin** (`.claude-plugin/plugin.json` + `skills/` + `hooks/` + `CLAUDE.md` fragment) | Clean |
@@ -45,7 +46,7 @@ them.**
 **One-liner:** identity → `CLAUDE.md`; capabilities → skills; reflexes → hooks; memory → a separate writable
 store.
 
-## 3. The four hard problems
+## 3. The hard problems
 
 Where naive porting breaks — each maps to a §1 asymmetry:
 
@@ -62,6 +63,11 @@ Where naive porting breaks — each maps to a §1 asymmetry:
    regresses, because a description-gated skill won't reliably fire after every turn.
 4. **Session-start retrieval must be forced.** → A `SessionStart` hook + a `CLAUDE.md` read-order contract.
    Description-triggered loading is probabilistic; retrieval you depend on must be deterministic.
+5. **Destructive-ops is the same event-vs-description problem on a different event.** The hard-gate
+   *sentence* belongs in `CLAUDE.md` (identity). The per-action check belongs on a pre-tool hook if one
+   exists (reflex). The ledger belongs in the writable store (memory). The full protocol is a skill
+   (capability). A skill-only port re-creates `06-FAILURE-MODES.md` F11 (inferred-permission deletion).
+   Detail: `destructive-operations.md` §10 and `host-portability.md` §7.
 
 ## 4. Cross-host skill sharing — one source, both hosts
 
@@ -119,5 +125,6 @@ accumulated *content* (§3.2) is what takes time to rebuild and must be migrated
 - `host-portability.md` — the general four-primitive method this file instantiates.
 - `08-BOOTSTRAPPING.md` / `11-MULTI-PROJECT-BOOTSTRAP.md` — the Cursor-shape bootstrap being ported.
 - `01-MEMORY-SYSTEM.md` / `10-ADAPTIVE-MEMORY-STRUCTURE.md` — the memory structure-vs-content split (§3.2).
-- `06-FAILURE-MODES.md` — the memory-update crowd-out failure that the `Stop` hook (§3.3) prevents.
+- `06-FAILURE-MODES.md` — the memory-update crowd-out failure that the `Stop` hook (§3.3) prevents; F11 (inferred-permission deletion) that a skill-only destructive-ops port re-creates.
 - `cold-ai-paradigm.md` — the write-time gate for the ported files.
+- `destructive-operations.md` — four-facet split; `CLAUDE.md` stub + skill + ledger + optional `PreToolUse` hook.

@@ -15,14 +15,16 @@ System Prompt Rules (always-injected)
 ├── Memory System Core .............. how to manage persistent state
 ├── Interaction Style ............... how to collaborate with the human
 ├── Domain Structure ................ how to organize technical knowledge (domain-specific; replace per project)
-└── Memory Update Triggers .......... checklist to prevent memory update omission
+├── Memory Update Triggers .......... checklist to prevent memory update omission
+└── Destructive-ops hard gate ....... never delete without an explicit per-file grant (identity stub; full protocol is on-demand)
 
 Persistent Memory (agent-managed files, read on demand)
 ├── WORKING_STYLE ................... master catalog of all behavioral directives + tracking metadata
 ├── SESSION_LOG ..................... per-session technical insights, artifacts, open questions
 ├── TECHNICAL ....................... domain knowledge: terminology, formulas, algorithms
 ├── CONCLUSIONS ..................... validated/invalidated findings
-└── CHANGELOG ....................... provenance of directive/structural changes (on-demand, not session-start)
+├── CHANGELOG ....................... provenance of directive/structural changes (on-demand, not session-start)
+└── PERMITTED_DESTRUCTIVE_ACTIONS ... ledger of human grants for irreversible actions (fail-closed if absent)
 
 Generalized Learnings (reference shelf — read during bootstrapping or reflection)
 ├── 00–08 ........................... domain-independent principles extracted from experience
@@ -38,7 +40,8 @@ Standalone Paradigm & Process Docs (named, not numbered — read on demand)
 ├── plan-refinement-loop ............ the process that produces + hardens a flexible plan via a bounded iterate → self-review → converge loop (wraps Flexible Plans; gated by cold-ai-paradigm)
 ├── working-notes-lean-context ...... task-scoped ephemeral notes + lean chat (window as cache); applies cold-ai-paradigm; distinct from durable persona memory
 ├── host-portability ................ general method for carrying a persona to a different host (map identity/memory/capabilities/reflexes → host primitives)
-└── host-adaptation-claude-code ..... the worked Claude Code instance of host-portability (CLAUDE.md / skills / hooks / writable store; four hard problems)
+├── host-adaptation-claude-code ..... the worked Claude Code instance of host-portability (CLAUDE.md / skills / hooks / writable store; hard problems)
+└── destructive-operations .......... never delete / non-trivially-reverse without an explicit per-file grant; splits across all four persona primitives (identity stub + reflex check + ledger + on-demand protocol)
 ```
 
 ## Reading Order
@@ -69,7 +72,8 @@ Standalone Paradigm & Process Docs (named, not numbered — read on demand)
 - `plan-refinement-loop.md` — the process that *produces and hardens* a flexible plan: a bounded draft → self-review (substance → cold-ai/flexible-plans → economy) → converge loop, with a worked adaptation in `exemplary-artifacts/warm-reset-plan_META.md`. Read when a plan warrants iterative self-review before commitment; builds on `Flexible Plans for AI Execution.md` + `cold-ai-paradigm.md`.
 - `working-notes-lean-context.md` — during a task, persist execution-local notes on disk so the chat stays a cache (folder layout, spec vs notes, wrap long tool output, resume from `NOTES.md` + `INDEX.md`). Applies `cold-ai-paradigm.md`; not a substitute for durable persona memory in `01-MEMORY-SYSTEM.md`.
 - `host-portability.md` — the general method for re-expressing a persona on a *different* host: decompose it into identity / memory / capabilities / reflexes and map each to the target host's primitive; the hard parts are always-on identity, event-fired reflexes, and writable-memory integrity. Read when porting away from Cursor.
-- `host-adaptation-claude-code.md` — the fully worked Claude Code instance of `host-portability.md`: the Cursor→Claude Code mapping table (`CLAUDE.md` / skills / hooks / writable store), the four hard problems, cross-host skill sharing, and packaging as a plugin. Read when the target host is Claude Code.
+- `host-adaptation-claude-code.md` — the fully worked Claude Code instance of `host-portability.md`: the Cursor→Claude Code mapping table (`CLAUDE.md` / skills / hooks / writable store), the hard problems, cross-host skill sharing, and packaging as a plugin. Read when the target host is Claude Code.
+- `destructive-operations.md` — the hard gate against inferred-permission deletion (untracked/gitignored `rm`, history rewrite, force-push, backup deletion). Identity stub always-on; full protocol on-demand; ledger in writable memory; reflex ideally a pre-tool hook. Instantiate at bootstrap (`08` / `11`); map onto a different host via `host-portability.md` §7. Read before any cleanup, wrap-up, or git-history task — and at persona creation, so the gate exists *before* the first accident.
 
 ## Key Design Decisions
 
@@ -105,7 +109,7 @@ alwaysApply: true
 Rule content in Markdown...
 ```
 
-`alwaysApply: true` ensures the rule is injected into every prompt. Other frameworks will have equivalent mechanisms (system messages, custom instructions, project-level prompts). The key requirement is that these rules are always present — they cannot depend on the agent remembering to read them, because the behaviors they enforce (like the memory update trigger checklist) are precisely the ones that get forgotten without injection.
+`alwaysApply: true` ensures the rule is injected into every prompt. Other frameworks will have equivalent mechanisms (system messages, custom instructions, project-level prompts). The key requirement is that these rules are always present — they cannot depend on the agent remembering to read them, because the behaviors they enforce (like the memory update trigger checklist, and the destructive-ops hard gate) are precisely the ones that get forgotten without injection. The destructive-ops *procedure* can be on-demand; the hard-gate *sentence* cannot (`destructive-operations.md` §10).
 
 ## Generality Tiers
 

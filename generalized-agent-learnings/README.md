@@ -30,6 +30,12 @@ file is written to be read on its own. Point the AI at one file; it will follow 
 > `.cursor/rules/`; Claude Code: `CLAUDE.md` + skills/hooks). `08`/`11` describe the Cursor shape; adapting to
 > another host is a known step, not a blocker — see `host-portability.md` (general method) and
 > `host-adaptation-claude-code.md` (the worked Claude Code instance).
+>
+> **Destructive-ops is part of Genesis, not a later add-on.** Instantiating a persona includes an always-on
+> hard-gate *stub* (never delete without an explicit per-file grant) plus an empty grant ledger. The full
+> protocol, and how it splits across the four persona primitives (identity / memory / capabilities /
+> reflexes), lives in `destructive-operations.md`. Point a *different* persona's agent at that file +
+> `host-portability.md` §7 — they do not need this corpus's originating persona.
 
 ## "I want to…" → open this
 
@@ -52,6 +58,7 @@ file is written to be read on its own. Point the AI at one file; it will follow 
 | Adapt the setup to Claude Code (not Cursor) | `host-adaptation-claude-code.md` |
 | Make the AI write notes its future self can actually reuse | `cold-ai-paradigm.md` |
 | Keep the chat lean — persist task working notes on disk | `working-notes-lean-context.md` |
+| Stop the AI deleting files without an explicit, specific grant | `destructive-operations.md` |
 | Write rules that actually change the AI's behavior | `Effective Behavioral Guidelines.md` |
 | Get a plan for a task that won't fall apart partway through | `Flexible Plans for AI Execution.md` |
 | Have the AI draft a plan, then critique and refine it before acting | `plan-refinement-loop.md` |
@@ -60,7 +67,8 @@ file is written to be read on its own. Point the AI at one file; it will follow 
 ## Notes
 
 - The numbered files (`00`–`11`) are the main guidance, roughly in reading order. The named files are standalone
-  topics you reach for when the goal above calls for them.
+  topics you reach for when the goal above calls for them. `destructive-operations.md` is one of those: instantiate
+  it at bootstrap (`08` / `11`), and keep the hard-gate *sentence* always-on even if the full protocol is on-demand.
 - `writes-thinks-speaks.md` is an earlier, narrower take that `cold-ai-paradigm.md` later absorbed — read it only for
   background.
 - `exemplary-artifacts/` holds real worked examples referenced by the guidance (e.g. a filled-in plan for

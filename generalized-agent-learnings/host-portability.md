@@ -19,10 +19,10 @@ Decompose the persona before you port it. Every persona, regardless of host, is 
 
 | Primitive | What it is | Examples in the Cursor shape (this corpus) |
 |---|---|---|
-| **Identity** | The always-present posture, values, and standing rules that must hold on *every* turn whether or not the model chooses to consult anything. | Always-injected rules (interaction style, memory-system core, the post-response trigger checklist). |
-| **Memory** | The read-**and**-write store the persona accumulates and mutates over time. | `WORKING_STYLE`, `SESSION_LOG`, `CONCLUSIONS`, the concept graph, indices, reinforcement counts. |
-| **Capabilities** | Load-when-relevant procedures/knowledge invoked on demand for a matching task. | Agent-requestable rules (self-improvement, evidence/validation, failure-modes, plan-authoring), review checklists. |
-| **Reflexes** | Actions that must fire on an *event* — not because the model decided to, but because the event occurred. | The post-response memory-update checklist (fires after every response); forced session-start retrieval. |
+| **Identity** | The always-present posture, values, and standing rules that must hold on *every* turn whether or not the model chooses to consult anything. | Always-injected rules (interaction style, memory-system core, the post-response trigger checklist, the destructive-ops hard-gate *stub*). |
+| **Memory** | The read-**and**-write store the persona accumulates and mutates over time. | `WORKING_STYLE`, `SESSION_LOG`, `CONCLUSIONS`, the concept graph, indices, reinforcement counts, the permitted-destructive-actions ledger. |
+| **Capabilities** | Load-when-relevant procedures/knowledge invoked on demand for a matching task. | Agent-requestable rules (self-improvement, evidence/validation, failure-modes, plan-authoring), review checklists, the full destructive-ops protocol. |
+| **Reflexes** | Actions that must fire on an *event* — not because the model decided to, but because the event occurred. | The post-response memory-update checklist (fires after every response); forced session-start retrieval; the per-action reversibility check (ideally a pre-tool hook on `rm` / force-push / history rewrite). |
 
 **A "skill" (in the Cursor/Claude sense) covers only *capabilities*.** So "turn the persona into skills"
 under-specifies the port: skills alone cannot hold identity (always-on), memory (writable), or reflexes
@@ -99,11 +99,29 @@ cleanly *separable* in the source persona is valuable on its own — it clarifie
 posture vs on-demand procedure vs event reflex, and makes the memory content/structure split explicit. That
 discipline pays off whether or not a second host ever materialises.
 
+## 7. Worked split: destructive operations (one protocol, four facets)
+
+`destructive-operations.md` is the canonical example of a behaviour that **looks like one rule** and
+**fails if you put it in only one primitive**. Naive port: "make it a skill / on-demand rule." That is
+exactly the inferred-permission failure — the model will not elect the skill at the moment of `rm`.
+
+| Facet | What to map | Host landing (generic) |
+|---|---|---|
+| **Identity** | Hard-gate *sentence*: never without an explicit grant covering those exact files; silence / unobjected default is not permission. | Always-loaded surface. Keep it a stub; pointer to the full protocol. |
+| **Reflexes** | Per-action reversibility check before mutating shell / git. | Pre-tool / pre-shell hook if the host has one; otherwise the always-on stub is doing extra work and you must say so (lossy). |
+| **Memory** | Permitted-actions ledger (master + optional per-run copy). Fail-closed if the per-run copy is lost. | Writable store, *outside* any versioned package (§4). |
+| **Capabilities** | Full protocol: confirmation-message shape, pre-deletion inbound/outbound checks, backup policy, directive table. | On-demand skill / requestable rule. Identity + reflex force the load. |
+
+Install recipe, numbering collision with this corpus's `06-FAILURE-MODES.md`, and the optional git-versioned-persona-tree carve-out: `destructive-operations.md` §10–§11. Bootstrap (`08` / `11`) instantiates the stub + empty ledger in Phase 0 / first session — before the first cleanup.
+
+This is also a test of §3: if the target host has no always-on surface, the hard gate *cannot* move to a skill. Plan for the loss; don't assume parity.
+
 ## Cross-references
 
 - `host-adaptation-claude-code.md` — the worked instance of this method for Claude Code (concrete mapping
-  table, the four hard problems, cross-host skill sharing, packaging as a plugin, risks).
+  table, the hard problems, cross-host skill sharing, packaging as a plugin, risks).
 - `08-BOOTSTRAPPING.md` / `11-MULTI-PROJECT-BOOTSTRAP.md` — the Cursor-shape bootstrap this method ports *from*.
 - `01-MEMORY-SYSTEM.md` / `10-ADAPTIVE-MEMORY-STRUCTURE.md` — the memory content-vs-structure split that §4
   relies on.
 - `cold-ai-paradigm.md` — the write-time gate to apply to every ported file (§5 step 6).
+- `destructive-operations.md` — worked four-facet split (§7); instantiate at bootstrap, then re-map per host.

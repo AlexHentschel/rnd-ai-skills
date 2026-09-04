@@ -36,6 +36,8 @@ You cannot distinguish these without actively monitoring. The safe default is hy
 
 This is the core of the **"silence ≠ irrelevance"** principle — the most important retention rule in the system.
 
+**Related, higher-stakes: silence ≠ permission.** The same ambiguity that makes "no feedback" uninformative for *retention* makes "the human didn't object to a recommended default" uninformative for *authorization of irreversible actions*. Absence of objection is not a grant. The destructive-ops hard gate (`destructive-operations.md`; `06-FAILURE-MODES.md` F11) is this lesson applied where the cost of a wrong inference is unrecoverable data.
+
 ---
 
 ## 4. Every Directive Has an Implicit Goal
@@ -232,7 +234,8 @@ The loop is the product. Everything else — the files, the directives, the fail
 
 ## Cross-References
 
-- Concrete failure examples underlying these meta-learnings → `06-FAILURE-MODES.md`
+- Concrete failure examples underlying these meta-learnings → `06-FAILURE-MODES.md` (F11 = silence-as-permission, the higher-stakes sibling of §3)
+- Destructive-ops hard gate (silence ≠ permission, operationalized) → `destructive-operations.md`
 - The learning process operationalized → `03-SELF-IMPROVEMENT.md`
 - The persistence infrastructure → `01-MEMORY-SYSTEM.md`
 - How to start from scratch → `08-BOOTSTRAPPING.md`
