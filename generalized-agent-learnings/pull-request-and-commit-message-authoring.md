@@ -29,6 +29,9 @@ grasp the shape of the change in a few seconds. **Detail lives in commits; the b
 - **Body:** explain the **why**, not a restatement of the **what** (the diff already shows the what). Name the reason:
   the bug, the constraint, the decision, the prior incident. Wrap prose at a readable width (~72 cols). One to a few
   short paragraphs is plenty.
+- **For a bug fix, name the root cause and point to where it fires** — not only the definition of the function at
+  fault. The definition tells the reviewer *what*; the firing site tells them *where and why it bites*. Prefer
+  "`computeID` returns a zero hash here, which the caller dereferences at `<callsite>`" over "`computeID` is buggy".
 - **Trailers:** when you (the AI) co-authored the change, add the co-authorship trailer the environment expects
   (e.g. a `Co-Authored-By:` line). Follow the project's convention.
 
@@ -55,6 +58,16 @@ themes**, each one line, with a one-line caveat if relevant. Resist the urge to 
 - **Flag reviewer decisions.** If the branch contains something the reviewer must actively decide or sign off
   (an unresolved question, a risk accepted, an item awaiting another owner), say so explicitly in one line. Don't bury
   it.
+- **Cover the whole blast radius.** If the change (or the bug it fixes) spans several variants, code paths, or call
+  sites, name them all, not a representative one. A reviewer who sees a single instance assumes there *is* a single
+  instance; enumerating the full affected set is the description's job, not the diff's.
+- **When the change touches an invariant or safety-critical behavior, give the correctness argument** — one or two
+  sentences naming the invariant preserved and the assumption relied on (and where it stops holding). The reviewer
+  should not have to reconstruct the safety case from the diff. Keep it concise for an expert audience: state the
+  claim, don't re-derive it (see `04-EVIDENCE-AND-VALIDATION.md`).
+- **Reference code by commit-pinned permalink; name affected code in prose.** Line numbers drift, so pin the commit
+  SHA (see `05-CODE-AND-DOCUMENTS.md § Code References in Documents`). Describe an affected path in plain words, never
+  by an internal audit/tracking label (`F4`, `E1-H`) the reviewer can't decode (see `05 § Scoped References`).
 - A light structure works well: a one-sentence framing, 3–4 theme bullets, then a closing caveat line (what's still
   open / reviewer-to-validate). Optionally a short test-plan checklist when the change is code that needs verifying.
 
@@ -121,11 +134,14 @@ merge conflicts; stacking keeps history linear.
 body says *why*? · new commit (not amend)? · hooks intact? · co-author trailer if applicable? · multi-line → use `-F file`.
 
 **Before opening/editing a PR:** know the full branch diff vs base · title ≤ ~70 chars · body = a few high-level themes,
-not an enumeration · reviewer-decisions/open items flagged · human's prose prefs honored · didn't clobber a
-human-edited body (read it first) · body via `--body-file` · return the URL.
+not an enumeration · reviewer-decisions/open items flagged · whole blast radius covered (all affected variants) ·
+correctness note if an invariant/safety path is touched · code refs commit-pinned, affected paths in prose (not
+internal labels) · human's prose prefs honored · didn't clobber a human-edited body (read it first) · body via
+`--body-file` · return the URL.
 
 ---
 
-*Related files in this collection: `05-CODE-AND-DOCUMENTS.md` (standards for code and written artifacts),
+*Related files in this collection: `05-CODE-AND-DOCUMENTS.md` (standards for code and written artifacts, incl. code
+references and scoped IDs), `04-EVIDENCE-AND-VALIDATION.md` (concise claims for expert audiences; the validation gate),
 `cold-ai-paradigm.md` (writing so a future/other reader needs no prior context), `02-INTERACTION-STYLE.md`
 (communicating with the human).*
