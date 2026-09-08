@@ -351,6 +351,7 @@ discipline, not extra work.
 
 ## Cross-references
 
+- `ai-notes-convention.md` — the git and lifecycle status of the `ai-notes/` folder itself (gitignored by default, never committed, one-directional dependency, scoping, and the tolerated checked-in exception). This document uses `ai-notes/` as the proposed notes-root name and covers what goes *inside* it; that one governs whether it is committed and where it lives.
 - `cold-ai-paradigm.md` — the write-time gate this document applies to working notes (decode · purpose · signals · lifecycle). Do not re-derive it here.
 - `04-EVIDENCE-AND-VALIDATION.md` — the durable-memory validation ladder (`unverified` → … → `verified`, human-only elevation) behind §2's status markers; also its self-confirmation-loop anti-pattern.
 - `01-MEMORY-SYSTEM.md` — durable *persona* memory (SESSION_LOG, WORKING_STYLE, …). Different lifetime and consumer than the task folder in §1.
