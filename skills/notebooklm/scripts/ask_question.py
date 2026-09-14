@@ -183,7 +183,7 @@ def ask_notebooklm(question: str, notebook_url: str, headless: bool = True) -> s
         StealthUtils.random_delay(500, 1500)
 
         # Wait for response: find the NEW (unmarked) chat-message-pair, then
-        # poll its bot answer for text stability (3 consecutive identical polls).
+        # poll its bot answer for text stability (6 consecutive identical polls = 3s).
         print("  ⏳ Waiting for answer...")
 
         answer = None
@@ -203,35 +203,95 @@ def ask_notebooklm(question: str, notebook_url: str, headless: bool = True) -> s
                 pass
 
             # Look for the new (unmarked) chat-message-pair and extract its bot answer.
+            # Two UI-drift defenses (2026-09-08, derived from a live DOM probe;
+            # pair-identity fallbacks tightened 2026-09-09):
+            #   (1) Identity-by-content: late-hydrating *historical* pairs can appear
+            #       after the pre-submit marking and be misidentified as the answer.
+            #       Select the pair whose USER message contains the full typed
+            #       question (whitespace-normalized). Document order is not recency:
+            #       several matches, or several unmarked with no match → keep polling.
+            #       Exactly one unmarked pair and no text match → use that pair
+            #       (user bubble lag).
+            #   (2) Body-only extraction: the bot answer renders inside
+            #       element-list-renderer as labs-tailwind-structural-element-view-v2
+            #       children (+ citation <ul>s); thinking-chain-view is a collapsed
+            #       sibling ("Thoughts / expand_more"). Reading the whole
+            #       .message-text-content settles on that 21-char header placeholder
+            #       while the body is still streaming. Read the renderer children,
+            #       excluding the thinking chain; if no renderer, strip
+            #       thinking-chain-view from the message and use the remainder.
             try:
                 result = page.evaluate(
                     "() => {\n"
+                    "  const norm = s => (s || '').replace(/\\s+/g, ' ').trim();\n"
+                    "  const bodyOf = bot => {\n"
+                    "    if (!bot) return '';\n"
+                    "    const renderer = bot.querySelector('element-list-renderer');\n"
+                    "    if (renderer) {\n"
+                    "      const parts = [];\n"
+                    "      Array.from(renderer.children).forEach(c => {\n"
+                    "        if (c.tagName.toLowerCase() !== 'thinking-chain-view')\n"
+                    "          parts.push(c.innerText);\n"
+                    "      });\n"
+                    "      return parts.join('\\n').trim();\n"
+                    "    }\n"
+                    "    const clone = bot.cloneNode(true);\n"
+                    "    clone.querySelectorAll('thinking-chain-view').forEach(n => n.remove());\n"
+                    "    return (clone.innerText || '').trim();\n"
+                    "  };\n"
                     "  const newPairs = document.querySelectorAll('div.chat-message-pair:not([data-pre-submit])');\n"
                     "  return {\n"
                     "    count: newPairs.length,\n"
-                    "    texts: Array.from(newPairs).map(p => {\n"
+                    "    pairs: Array.from(newPairs).map(p => {\n"
                     "      const bot = p.querySelector('.to-user-container .message-text-content');\n"
-                    "      return bot ? bot.innerText.trim() : '';\n"
+                    "      const usr = p.querySelector('.from-user-container .message-text-content');\n"
+                    "      return { user: norm(usr ? usr.innerText : ''), body: bodyOf(bot) };\n"
                     "    })\n"
                     "  };\n"
                     "}"
                 )
             except Exception:
-                result = {"count": 0, "texts": []}
+                result = {"count": 0, "pairs": []}
 
             new_count = result.get("count", 0)
-            new_texts = result.get("texts", [])
+            new_pairs = result.get("pairs", [])
+            qnorm = re.sub(r"\s+", " ", question).strip()
 
             if new_count == 0:
                 time.sleep(0.5)
                 continue
-            if new_count > 1 and not warned_multi:
-                print(f"  ⚠️ Multiple unmarked pairs ({new_count}); taking the first")
-                warned_multi = True
 
-            text = new_texts[0] if new_texts else ""
+            # Prefer the unmarked pair whose user text contains the full question.
+            # Ambiguous identity → keep polling (DOM order is not recency).
+            # If several unmarked pairs exist and any user bubble is still empty,
+            # wait — a late historical pair can match first while the new bubble
+            # has not landed.
+            if new_count > 1 and any(not p["user"] for p in new_pairs):
+                time.sleep(0.5)
+                continue
+
+            matched = [p for p in new_pairs if qnorm and qnorm in p["user"]]
+            if len(matched) == 1:
+                text = matched[0]["body"]
+            elif len(matched) > 1:
+                if not warned_multi:
+                    print(f"  ⚠️ Multiple unmarked pairs ({new_count}); "
+                          f"several user-message matches — still polling")
+                    warned_multi = True
+                time.sleep(0.5)
+                continue
+            elif new_count == 1:
+                text = new_pairs[0]["body"] if new_pairs else ""
+            else:
+                if not warned_multi:
+                    print(f"  ⚠️ Multiple unmarked pairs ({new_count}); "
+                          f"no user-message match — still polling")
+                    warned_multi = True
+                time.sleep(0.5)
+                continue
             if not text:
-                # New pair exists but bot answer hasn't started streaming yet.
+                # New pair exists but bot answer body hasn't started streaming yet
+                # (empty = still collapsed to the thinking-chain placeholder).
                 time.sleep(0.5)
                 continue
 

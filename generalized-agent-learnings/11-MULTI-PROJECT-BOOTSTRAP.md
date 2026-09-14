@@ -189,7 +189,7 @@ Authored to be executable by a fresh AI agent with no prior persona context. Fol
 **Constraints** (fixed):
 - Self-containment from minute zero: no absolute paths into source-persona directories anywhere under `.cursor/`.
 - Rollback snapshot of any pre-existing `memory/` or `knowledge/` directory before any structural change. **This snapshot is a backup-class action** (`destructive-operations.md` §8): get a one-time grant for the snapshot location at pre-flight; do not silently copy trees. Deleting the snapshot later is itself gated.
-- Validation gate (`§ 6.2`) preserved: human-only elevation of technical findings to `verified`.
+- Validation gate (`§ 6.2`) preserved: do not self-elevate technical findings to `verified` (who/what can confirm is context-dependent; `04-EVIDENCE-AND-VALIDATION.md`).
 - Destructive-ops hard gate installed before any cleanup: always-on stub (`06-destructive-operations.mdc`) + empty ledger. Deleting bootstrap scratch, failed snapshots, or "temp" files is **not** autonomous — escalate per `destructive-operations.md` §5. Phase 7 already records "deletion of disposable artefacts is the user's call"; that is this gate, applied.
 
 **Known unknowns** (fixed; this phase exists to resolve them):
@@ -399,7 +399,7 @@ The destructive-ops hard gate is **not** a 10th autonomous-execution default. It
 
 Two categories with different update rights:
 
-- **Technical conclusions** (findings about the system under analysis): agent records at `unverified` or `evidence-supported`; only the human elevates to `verified`. The agent proactively surfaces when evidence is sufficient.
+- **Technical conclusions** (findings about the system under analysis): agent records at `unverified` or `evidence-supported`; do not self-elevate to `verified` (who or what can confirm is context-dependent — `04-EVIDENCE-AND-VALIDATION.md`). The agent proactively surfaces when evidence is sufficient.
 - **Operational content** (working style, session logs, meta-guidelines): agent updates freely.
 
 Status ladder for technical findings: `unverified → evidence-supported → verified` (or `disputed` / `invalidated`).

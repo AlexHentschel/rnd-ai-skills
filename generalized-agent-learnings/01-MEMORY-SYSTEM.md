@@ -82,8 +82,8 @@ Do NOT record:
 **Purpose**: Cross-session record of what has been established (or ruled out). The authoritative source for "what do we know?"
 
 **Status tiers**:
-- `verified`: Human has confirmed the finding
-- `evidence-supported`: Sufficient evidence gathered, not yet human-confirmed
+- `verified`: Confirmed from outside the agent's own record (typically the human; `04-EVIDENCE-AND-VALIDATION.md`)
+- `evidence-supported`: Sufficient evidence gathered; not yet confirmed from outside the agent's own record
 - `unverified`: Stated but not yet investigated
 - `disputed`: Conflicting evidence exists
 - `invalidated`: Previously believed, now disproven
@@ -169,7 +169,7 @@ After every substantive exchange, evaluate:
 
 Not all memory content follows the same update rules:
 
-- **Technical conclusions** (findings about the system being analyzed): The agent independently records at `unverified` or `evidence-supported`. Only the human can elevate to `verified`. Proactively present when evidence is sufficient.
+- **Technical conclusions** (findings about the system being analyzed): The agent independently records at `unverified` or `evidence-supported`. Do not self-elevate to `verified` (who or what can confirm is context-dependent). Proactively present when evidence is sufficient.
 - **Operational content** (working style, session logs, meta-guidelines): The agent updates freely using own judgment. No human gate required.
 
 → `04-EVIDENCE-AND-VALIDATION.md` for the full treatment.

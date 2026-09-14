@@ -55,6 +55,7 @@ A reader forms their mental model from the outermost documentation inward (docst
 - Ground domain-specific terms in general concepts (e.g., if using protocol-specific jargon, define it in terms the reader would know from standard CS/finance/etc.)
 - Back every claim with inline evidence (parameter values, code references, output snippets)
 - Don't assume the reader has context from conversations — the document may be read by someone who wasn't part of the discussion
+- Do not depend on **machine-local or per-person state** (absolute home paths, another person's memory, `ai-notes/` paths). A committed team document must still make sense if those paths vanished. Git/lifecycle of the notes folder: `ai-notes-convention.md` rule 4.
 
 ### Terminology Discipline `[technical]`
 

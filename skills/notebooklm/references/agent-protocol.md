@@ -68,7 +68,8 @@ The tool prints progress to stdout. You only need to branch on a few lines; the 
 | `❌ Prompt over budget: …` | your prompt exceeds the cap (§4) | shorten **or split into focused questions**; retry |
 | `❌ Prompt not fully entered: …` | input truncated your prompt before submit | shorten; retry |
 | `❌ Timeout waiting for answer` | 120s passed with no stable answer | prompt likely too long (but under cap) or notebook stuck — retry once, then shorten/split |
-| `⚠️ Multiple unmarked pairs (N); taking the first` | answer-selection was ambiguous | treat answer skeptically; retry with a shorter prompt |
+| `⚠️ Multiple unmarked pairs (N); several user-message matches — still polling` | several unmarked pairs match the typed question | wait; if the query still times out, retry with a more distinctive prompt |
+| `⚠️ Multiple unmarked pairs (N); no user-message match — still polling` | several unmarked pairs, none match the typed question | wait; if the query still times out, retry with a shorter prompt |
 | `❌ Error: …` (+ traceback on stderr) | browser/launch error (often a stale profile lock) | see `troubleshooting.md` FM-8; retry after cleanup |
 | `❌ Failed to get answer` | generic final failure (`exit 1`) | read the `❌`/`⚠️` line above it for the real cause |
 

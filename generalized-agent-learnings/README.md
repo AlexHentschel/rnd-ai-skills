@@ -58,6 +58,7 @@ file is written to be read on its own. Point the AI at one file; it will follow 
 | Adapt the setup to Claude Code (not Cursor) | `host-adaptation-claude-code.md` |
 | Make the AI write notes its future self can actually reuse | `cold-ai-paradigm.md` |
 | Keep the chat lean — persist task working notes on disk | `working-notes-lean-context.md` |
+| Know where the AI's working-notes folder lives, whether it is committed, and that claims in it can still be authoritative | `ai-notes-convention.md` |
 | Stop the AI deleting files without an explicit, specific grant | `destructive-operations.md` |
 | Write rules that actually change the AI's behavior | `Effective Behavioral Guidelines.md` |
 | Get a plan for a task that won't fall apart partway through | `Flexible Plans for AI Execution.md` |

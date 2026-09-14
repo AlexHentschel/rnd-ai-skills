@@ -10,9 +10,9 @@ Not all content in memory is equal. Two categories have different update rules:
 
 Formulas, algorithms, invariants, behavioral claims about the system being analyzed.
 
-**Rule**: The agent may independently identify and record findings at `unverified` or `evidence-supported` status. Only the human can elevate to `verified`.
+**Rule**: The agent may independently identify and record findings at `unverified` or `evidence-supported` status. Do not self-elevate to `verified`. Who or what can confirm is context-dependent (`§ What evidence-supported licenses`). Default when a human domain expert is in the loop: only that human marks `verified`.
 
-**Rationale**: The human is the authority on correctness. The agent is a research instrument. The agent's job is to find evidence and present it clearly; the human's job is to confirm or challenge.
+**Rationale**: The agent is a research instrument. Confirmation must come from something outside the agent's own record. That is often the collaborating human; in a mature domain it can be a dated trustworthy external source.
 
 **Status ladder**:
 ```
@@ -26,10 +26,20 @@ unverified → evidence-supported → verified
 | Status | Meaning | Who can set |
 |--------|---------|-------------|
 | `unverified` | Stated or extracted, not yet investigated | Agent |
-| `evidence-supported` | Sufficient code/data evidence gathered, not yet human-confirmed | Agent |
-| `verified` | Human has explicitly confirmed the finding | Human only |
+| `evidence-supported` | Sufficient code/data evidence gathered; not yet confirmed from outside the agent's own record | Agent |
+| `verified` | Confirmed from outside the agent's own record | Typically the human; see below |
 | `disputed` | Conflicting evidence exists; needs resolution | Agent or Human |
 | `invalidated` | Previously believed, now disproven; retain with correction history | Agent or Human |
+
+### What evidence-supported licenses (context-dependent)
+
+The mark means: enough evidence to work from. It does **not** by itself make the claim the **source of truth (SOT)** — the record treated as authoritative for the next decision. Weight the mark by the kind of work:
+
+1. **Cutting-edge work with a human domain expert.** Diverse external references that could verify or falsify the claim are often unavailable. SOT for that claim needs the human's confirmation. `evidence-supported` is the best working claim, not settled. Elevation to `verified` is human-only (the Category 1 default).
+2. **Universality claims over complex systems** (e.g. a large codebase: "always", "in all cases", "every execution path"). Exhaustive tools raise you *to* `evidence-supported`. Read it as *likely / most likely*. Residual falsehood remains unless the guarantee is baked in by design or formally proved.
+3. **Mature, non-cutting-edge domains** where the collaborating human may not be the domain expert. `evidence-supported` may be the practical ceiling, **or** a dated, trustworthy external source (a spec, a standard, a primary paper) can stand in as confirmation — that is an external check, not rereading your own note (`§ The Self-Confirmation Loop`).
+
+Do not collapse these into one rule. When a human domain expert is in the loop on cutting-edge work, do not self-elevate to `verified`.
 
 ### Category 2: Operational Content (meta-guidelines, working style, session logs)
 
@@ -65,9 +75,10 @@ The defense is to require something **external** to the agent's own record befor
 
 - the human explicitly confirming it;
 - a passing test / executed check that would fail if the claim were wrong;
-- the same finding surfacing independently, from a source that did not read this record.
+- the same finding surfacing independently, from a source that did not read this record;
+- in a mature domain, a dated trustworthy external source (spec, standard, primary paper) — `§ What evidence-supported licenses` case 3.
 
-This is the failure mode the validation ladder above exists to prevent (only the human elevates to `verified`). It applies beyond durable memory findings, to **any long-lived store the agent maintains and re-reads**: an agent's own working notes harden self-generated conclusions the same way if nothing outside them confirms. For the task-notes instance of this discipline (status markers on unconfirmed claims, dating what can go stale, read-time staleness triage), see `working-notes-lean-context.md § 2` and `§ 6`.
+This is the failure mode the validation ladder above exists to prevent (do not treat rereading as confirmation; `verified` is not a self-promotion). It applies beyond durable memory findings, to **any long-lived store the agent maintains and re-reads**: an agent's own working notes harden self-generated conclusions the same way if nothing outside them confirms. For the task-notes instance of this discipline (status markers on unconfirmed claims, dating what can go stale, read-time staleness triage), see `working-notes-lean-context.md § 2` and `§ 6`. Who or what can confirm is context-dependent (`§ What evidence-supported licenses`).
 
 Minor for a single short task; decisive for anything long-lived, where the store accretes authority with age precisely as its content ages.
 
@@ -118,10 +129,9 @@ After making changes, verify all references in affected documents as a backgroun
 
 When you believe evidence is sufficient:
 1. Record the finding at `evidence-supported` in your own memory
-2. Present it to the human: evidence summary + confidence statement
-3. Ask explicitly: "Can I mark this as validated?"
-4. On human confirmation → elevate to `verified`
-5. On human challenge → investigate further, update status
+2. Present it: evidence summary + confidence statement (and, when a human domain expert is in the loop, ask explicitly whether it can be marked `verified`)
+3. On confirmation from outside the agent's own record → elevate to `verified`. Default with a human domain expert in the loop: that is the human's explicit confirmation. In a mature domain with no domain-expert human, a dated trustworthy external source can stand in (`§ What evidence-supported licenses` case 3) — still not rereading your own note.
+4. On challenge → investigate further, update status
 
 ### The Cost of False Confidence
 
@@ -188,6 +198,7 @@ This applies broadly: code fixes, document corrections, memory system changes, c
 
 - Validation gate and proactive engagement → `02-INTERACTION-STYLE.md` §4 (proactive engagement)
 - Evidence standards and failure modes → `06-FAILURE-MODES.md` (F3: exhaustive claims, F6: premature validation)
+- Task-notes honor of marked confidence → `working-notes-lean-context.md` (§2, load-bearing core) and `ai-notes-convention.md` §2 (authority is per-claim, weighted by this section)
 - Self-confirmation loop, task-notes instance → `working-notes-lean-context.md` (§2 date/mark discipline, §6 read-time triage)
 - Context transitions and the bootstrapping trajectory → `08-BOOTSTRAPPING.md` (phase transitions, transferring to new domains)
 - Root cause tracing methodology → `05-CODE-AND-DOCUMENTS.md` (code references in documents)
