@@ -90,7 +90,7 @@ These are not hypothetical. Every failure mode listed here actually occurred and
 **Root cause**: I conflated "I'm confident this is correct" with "the human has confirmed this is correct." These are different epistemological states.
 
 **Prevention**:
-- **Validation gate.** Only the human elevates findings to `verified`. The agent can independently reach `evidence-supported`.
+- **Validation gate.** Do not self-elevate to `verified`. Default with a human domain expert in the loop: only that human marks `verified`. The agent can independently reach `evidence-supported`. Full reading: `04-EVIDENCE-AND-VALIDATION.md` § What evidence-supported licenses.
 - **Proactively present** findings when evidence is sufficient — don't wait to be asked. But always ask for confirmation before marking `verified`.
 
 **Generality**: `[universal]` — applies to any collaboration where one party is the authority on correctness.

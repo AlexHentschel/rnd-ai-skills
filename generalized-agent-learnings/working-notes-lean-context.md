@@ -1,8 +1,9 @@
 # Working notes + lean context
 
-**Authored:** 2026-08-31. Minimally adjusted copy of a starting prompt used with a collaborator; dest-local cold-AI path only.
+**Authored:** 2026-08-31.
+Minimally adjusted copy of a starting prompt used with a collaborator; dest-local cold-AI path only.
 **Status:** operational discipline. Use as a starting prompt (inspect and adapt) or as standing practice once a notes location is agreed.
-**Audience:** an AI running a task. Distinct from durable persona memory (`01-MEMORY-SYSTEM.md`) and from the write-time gate (`cold-ai-paradigm.md`, which this document applies).
+**Audience:** an AI running a task — usually a later session of the **same persona** that wrote the notes. Distinct from durable persona memory (`01-MEMORY-SYSTEM.md`) and from the write-time gate (`cold-ai-paradigm.md`, which this document applies). Git + epistemic role of the folder: `ai-notes-convention.md`.
 
 Intent: treat the LLM's chat context window as a cache, not as a durable information store.
 Put details and reasoning on disk so you can resume, re-read, and critically reconsider later.
@@ -18,14 +19,17 @@ If you read nothing else, hold these; everything below elaborates them.
   task's notes folder; only what the current step needs is loaded back in.
 - Working notes are **written for a cold AI** — a fresh session with only the files —
   and pass the four checks: decode · purpose · signals · lifecycle (§2).
-- **Spec vs working notes:** team-shared/durable/foundational → spec; execution-local/
-  in-flight → notes (§3). Never apply staged spec edits without human sign-off.
+- **Spec vs working notes:** team-shared durable spec (team source of truth (SOT) when a spec exists) vs this task's working store (§3).
+  Notes may hold high-confidence analysis (this-task SOT when so marked, weighted by kind of work —
+  `04-EVIDENCE-AND-VALIDATION.md` § What evidence-supported licenses). Never apply
+  staged spec edits without human sign-off.
 - **Long outputs go through a wrapper sub-agent** that returns a short summary plus the
   path to a detail file (§4) — never dump payloads into the caller's window.
 - **Detail files are evidence, not just summaries**: cold-AI-readable wrapper + the
   verbatim payload intact (§4).
-- **Do not silently trust the notes' own past conclusions.** Date what can go stale,
-  mark what is unconfirmed, and re-verify at read time (§2, §6).
+- **Honor marked confidence; do not silently promote guesses.** Date what can go stale,
+  mark unconfirmed claims, treat high-confidence sourced claims as this-task SOT at the
+  weight `04-EVIDENCE-AND-VALIDATION.md` describes, until contradicted (§2, §6).
 - **Resume lean**: first action = `NOTES.md` + `INDEX.md`; open further files only when
   this session's work needs them (§6).
 
@@ -52,8 +56,10 @@ Minimal context (enough to decide, and no more) for the human domain expert:
   - high-level goal of the notes (one or two sentences): persist execution
     detail so this or a later session can continue after compaction or a
     fresh context window; keep the chat lean
-  - lifetime: ephemeral, scoped to this task (including later sessions on
-    the same task); not team-shared durable docs; typically gitignored
+  - lifetime: scoped to this task (including later sessions on the same
+    task); typically gitignored (not a team-shared *folder*). Claims inside
+    can still be this-task SOT when marked, at the weight
+    `04-EVIDENCE-AND-VALIDATION.md` describes.
 
 Do not dump this whole prompt into that message. Do not commit secrets.
 
@@ -114,8 +120,11 @@ Before you consider a note done, check all four:
   4. Lifecycle — it is clear how old this is, how it was last confirmed,
      and whether it is still current.
 
-Do not treat prior notes as settled truth. Record what would change
-the current conclusion so a later session can challenge it.
+Honor each note's **marked** confidence, weighted by the kind of work
+(`04-EVIDENCE-AND-VALIDATION.md` § What evidence-supported licenses). Unconfirmed
+self-authored claims are not settled (rereading your own note is not confirmation).
+High-confidence, sourced analysis **can be this-task SOT** until contradicted.
+Record what would change the current conclusion so a later session can challenge it.
 
 Motivation: compaction and new chats drop thought chains. Notes that only
 this session (with its live chat context) can decode are equivalent to
@@ -141,7 +150,8 @@ tokens only where staleness is a real hazard:
   markers. Rereading your own note is not confirmation: one agent
   writing, reading, and judging its own notes is the loop that hardens a
   guess into "settled". Something external must confirm — the human
-  expert, a passing test, or the same finding surfacing independently.
+  expert, a passing test, the same finding surfacing independently, or
+  (in a mature domain) a dated trustworthy external source.
   (For durable persona memory, the same principle is the validation
   ladder in `04-EVIDENCE-AND-VALIDATION.md`.)
 - **Settled reasoning** (decisions with their why, discarded alternatives,
@@ -157,12 +167,16 @@ Do not assume every task is spec-driven. When the work *does* have a spec
 (a persisted document shared across the team: requirements, design,
 settled decisions, guidelines), discriminate:
 
-  - **Spec** — typically team-shared, durable. The foundation of the work (incl.
-    task context, settled findings, decisions, guidelines) belongs here so
-    the whole team can see it.
-  - **Working notes** (the folder from §1; this prompt proposes `ai-notes/`) — local and ephemeral. Relevant mostly
-    while executing this task (in-flight reasoning, discarded alternatives,
-    scratch). You may edit these autonomously.
+  - **Spec** — typically team-shared, durable. Team-visible foundation (task
+    context, settled findings, decisions, guidelines) belongs here so the whole
+    team can see it.
+  - **Working notes** (the folder from §1; this prompt proposes `ai-notes/`) —
+    the task working store: local, typically gitignored, editable autonomously.
+    May include exploratory scratches *and* high-confidence analysis. Two SOT senses:
+    the **spec** is team-shared SOT; a marked note can be this-task SOT (weight:
+    `04-EVIDENCE-AND-VALIDATION.md`). After the work, wrap-up compresses and lifts what
+    still earns a durable/shared home; until then do not treat the folder as
+    "never true." Git/lifecycle: `ai-notes-convention.md`.
 
 You may autonomously *stage* proposed spec edits in `spec-staging/` (dedicated
 files in this task folder). Do not apply those staged changes to the spec itself
@@ -297,7 +311,7 @@ Load-bearing for resuming (the rest of the core is at the top of this prompt):
 
   - First action: read NOTES.md and INDEX.md into the context window.
     They are the entry; do not load every file in the tree into the window.
-  - If NOTES.md names a spec, that path is the shared source of truth.
+  - If NOTES.md names a spec, that path is the **team** source of truth (shared SOT).
     Load into the context window only the parts the current step needs;
     do not load the whole spec into the window by default.
   - Working notes: if one looks wrong, update it in place and record why
@@ -351,9 +365,9 @@ discipline, not extra work.
 
 ## Cross-references
 
-- `ai-notes-convention.md` — the git and lifecycle status of the `ai-notes/` folder itself (gitignored by default, never committed, one-directional dependency, scoping, and the tolerated checked-in exception). This document uses `ai-notes/` as the proposed notes-root name and covers what goes *inside* it; that one governs whether it is committed and where it lives.
+- `ai-notes-convention.md` — git/lifecycle **and** epistemic role: gitignored default ≠ non-authoritative; two SOT senses (team spec vs this-task analysis); authority is per-claim confidence weighted by kind of work. This document covers what goes *inside* the folder.
 - `cold-ai-paradigm.md` — the write-time gate this document applies to working notes (decode · purpose · signals · lifecycle). Do not re-derive it here.
-- `04-EVIDENCE-AND-VALIDATION.md` — the durable-memory validation ladder (`unverified` → … → `verified`, human-only elevation) behind §2's status markers; also its self-confirmation-loop anti-pattern.
+- `04-EVIDENCE-AND-VALIDATION.md` — the durable-memory validation ladder (`unverified` → … → `verified`) and what `evidence-supported` licenses (context-dependent; not a SOT switch). Also its self-confirmation-loop anti-pattern. Behind §2's status markers.
 - `01-MEMORY-SYSTEM.md` — durable *persona* memory (SESSION_LOG, WORKING_STYLE, …). Different lifetime and consumer than the task folder in §1.
 - `08-BOOTSTRAPPING.md` — first-session persona setup + session-start retrieval of those durable files. This document is the during-a-task counterpart.
 - `09-RECURSIVE-LEARNING.md` — sub-agent offload of *memory/reflection* (priority-3 crowding). Distinct from §4 here (wrap long tool output so the *task* window stays lean).
