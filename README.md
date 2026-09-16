@@ -11,6 +11,9 @@ Current capabilities:
 - **research-notebook claim validation** for scientific papers (two-layer: tool + methodology);
 - **confirming a reported vulnerability** — a methodology skill for a human-expert + AI pair to
   confirm/refute, generalize, and report a *reported* security defect;
+- **memory-maintenance cycle** — a methodology skill for reorganizing a coding agent's long-term memory /
+  rule tree while *proving* nothing became harder to find or was lost, via a paired cold-agent retrieval
+  eval; ships a host-agnostic harness contract + a Cursor reference adapter;
 - **generalized-agent-learnings** — a reference corpus for setting up and running an AI persona well over
   the long term (memory, self-improvement, bootstrapping single- or multi-project).
 
@@ -47,6 +50,23 @@ Current capabilities:
   turn where the skill did not load (treat report+PoC+recollections as a hypothesis; verify-don't-accept;
   don't-get-ahead-of-the-evidence). Paste into your `CLAUDE.md` / always-apply rule.
 
+## The third capability — memory-maintenance cycle
+- **Methodology skill — `skills/memory-maintenance-cycle/`** — reorganize a coding agent's long-term memory
+  tree (rules, concept notes, indexes) for better retrieval and leanness, gating every structural change on
+  a **measured** paired cold-agent retrieval eval so improvements never silently bury or drop knowledge.
+  Four-phase cycle (pre-plan → draft → execute-loop → close); priority order **discoverability > fidelity >
+  leanness**; trust the paired **delta**, not the absolute reach. `disable-model-invocation: true` (loads
+  only on explicit invoke — it is a heavyweight cycle, not for small edits). Entry point: its `SKILL.md`;
+  origin + scope deferrals: `PROVENANCE.md`.
+- **Harness (two parts).** `reference/harness-contract.md` is the **host-agnostic contract** (inputs = a
+  memory-tree copy + probe + model; outputs = an ordered file-read trace + answer; plus isolation + paired
+  scoring interface) — the portable artifact. `harness/run_probe_cursor.py` is **one Cursor SDK reference
+  adapter** (argparse-driven; run/auth/smoke-test notes in `harness/README.md`). A foreign host writes its
+  own adapter **against the contract** rather than porting the script.
+- **No always-on snippet.** Unlike the two skills above, this one has no hard reflex that must hold every
+  turn — it is invoked deliberately for a bounded reorganization task, so there is nothing to add to
+  `CLAUDE.md-snippet.md`.
+
 ## Layout
 ```
 rnd-ai-skills/
@@ -64,9 +84,14 @@ rnd-ai-skills/
     │       ├── per-claim-validation-loop.md
     │       ├── prompt-templates.md
     │       └── troubleshooting.md
-    └── confirming-a-reported-vulnerability/   ← methodology skill (generic; persona-neutral; no tool dep)
-        ├── SKILL.md
-        └── PROVENANCE.md                    ← origin + derivation + evidence basis (neutral; no exploit detail)
+    ├── confirming-a-reported-vulnerability/   ← methodology skill (generic; persona-neutral; no tool dep)
+    │   ├── SKILL.md
+    │   └── PROVENANCE.md                    ← origin + derivation + evidence basis (neutral; no exploit detail)
+    └── memory-maintenance-cycle/            ← methodology skill (generic; persona-neutral) + harness
+        ├── SKILL.md                         ← the four-phase cycle (disable-model-invocation: true)
+        ├── PROVENANCE.md                    ← origin + scope deferrals (neutral)
+        ├── reference/                       ← harness-contract, probe-design, probe-example, scoring-rubric
+        └── harness/                         ← run_probe_cursor.py (Cursor adapter) + README + example-driver.sh
 ```
 
 ## Install
